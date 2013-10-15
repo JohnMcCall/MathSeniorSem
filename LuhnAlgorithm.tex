@@ -39,11 +39,8 @@ number is valid according to the Luhn formula; else it is not valid.
 \end{enumerate}
 
 \section{Example}
-
 Take the account number 7992739871, we will add a check digit, making the
 number: 7992739871x.
-
-INSERT A TABLE HERE
 
 We obtain x by computing the sum of the digits and then multiplying that value
 by 9 modulo 10. In this case, the sum of the digits is 67. 67 times 9 equals
@@ -54,5 +51,11 @@ in a 0, meaning that the account number is valid. Alternately,
 if you already know the check digit, one can do the computation to determine
 the check digit and compare that result to the known digit. If they match the
 account number is valid, otherwise it's invalid.
+
+\section{Strengths and Weaknesses}
+The Luhn algorithm will catch any single-digit error and most cases of switching
+adjacent digits. However, it will not detect 09 being switched to 90 (or vise versa).
+It will detect 7 of the 10 possible twin errors (it will not detect: $22 \leftrightarrow 55,
+33 \leftrightarrow 66, 44 \leftrightarrow 77$).
 
 \end{document}
