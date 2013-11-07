@@ -1,18 +1,28 @@
 \documentclass{article}
 \usepackage{amsmath}
 
-\newtheorem{ring}{Definition}
-\newtheorem{group}{Definition}
-\newtheorem{field}{Definition}
 
 \begin{document}
 
-\begin{ring}
 
-\end{ring}
+A \textit{ring} a set $R$ with two binary operations + and $\cdot$, called
+addition and multiplication, which maps every pair of elements of $R$
+to a unique element of $R$. In order to qualify as a ring, these operations
+must satisfy the \textit{ring axioms}, which must be true for all
+$a, b, c \in R$. The ring axioms are:
 
-\begin{group}
-A group is a set, $G$, with an operation, $\cdot$, that combines
+\begin{enumerate}
+  \item $(a + b) + c = a + ( b + c)$ (+ is associative)
+  \item There is an element $0 \in R$ such that $0 + a = a$ (0 is the \textit{zero element}
+  \item $a + b = b + a$ (+ is commutative)
+  \item For each $a \in R$ there exists $-a \in R$ such that $a + (-a) = (-a) + a = 0$ ($-a$ is the inverse element of $a$)
+  \item $(a \cdot b) \cdot c = a \cdot (b \cdot c)$ ($\cdot$ is associative)
+  \item $a \cdot (b + c) = (a \cdot b) + (a \cdot c)$ (left distributivity)
+  \item $(b + c) \cdot a = (b \cdot a) + (c \cdot a)$ (right distributivity)
+  \item There is an element $1 \in R$ such that $a \cdot 1 = 1 \cdot a = a$ (multiplicative identity)
+\end{enumerate}
+
+A \textit{group} is a set, $G$, with an operation, $\cdot$, that combines
 any two elements $a$ and $b$ to form another element, written as
 $a \cdot b$ or $ab$. In order to qualify as a group, the set
 and the operation, $(G, \cot)$, must satisfy the \textit{group axioms}
@@ -21,7 +31,7 @@ which are as follows.
 \textbf{Closure}: For all $a, b \in G$, the result of the operation,
 $a \cdot b$, is also in $G$.
 
-\textbf{Associativity}: For all $a, b \text{and} c \in G, (a \cdot b)
+\textbf{Associativity}: For all $a, b \text{ and } c \in G, (a \cdot b)
 \cdot c = a \cdot (b \cdot c)$.
 
 \textbf{Identity element}: There exists an element $e \in G$, such that
@@ -30,12 +40,35 @@ for every element $a \in G, e \cdot a = a \cdot e = a$.
 \textbf{Inverse element}: For each $a \in G$, there exists an element
 $b \in G$ such that $a \cdot b = b \cdot a = e$, where $e$ is the
 identity element.
+\newline
 
-\end{group}
+A \textit{field} is a set $F$ with two operations, addition and multiplication,
+such that the following axioms hold:
 
-\begin{field}
+\textbf{Closure}: For all $a, b \in F$ both $a + b \text{ and } a \cdot b$
+are in $F$
 
-\end{field}
+\textbf{Associativity}: For all $a, b, \text{ and } c \in F$ the following
+equalities hold: $a + (b + c) = (a + b) + c \text{ and } a \cdot (b \cdot c) =
+(a \cdot b) \cdot c$
+
+\textbf{Commutativity}: For all $a \text{ and } b \in F$ the following 
+equalities hold: $a + b = b + a$ and $a \cdot b = b \cdot a$
+
+\textbf{Existence of Identity Elements}: There exists an element of $F$,
+called the \textit{additive identity} and denoted by 0, such that for all
+$a \in F, a + 0 = a$. Likewise, there is an element, called the
+\textit{multiplicative identity} and denoted by 1, such that for all $a \in F,
+a \cdot b = a$. The additive and multiplicative identities are required
+to be distinct.
+
+\textbf{Existence of Inverse Elements}: For every $a$ in $F$, there exists
+an element $-a$ in $F$, such that $a + (-a) = 0$. Similarly, for any $a$ in $F$,
+other than 0, there exists an element $a^{-1}$ in $F$ such that $a \cdot a^{-1} = 1$
+
+\textbf{Distributivity}: For all $a, b, \text{ and } c \in F$ the following equality
+holds: $a \cdot (b + c) = (a \cdot b) + (a \cdot c)$
+
 
 \end{document}
 
