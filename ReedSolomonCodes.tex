@@ -9,10 +9,42 @@
 
 \maketitle
 
-\section{Background}
+\section{Introduction}
+Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as
 
+\begin{center}
+$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v}) = \{(v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))\;|\;f(x) \in F[x]_{k}\}$.
+\end{center}
+Here $F[x]_{k}$ is the set of polynomials in $F[x]$ with degree less than $k$. If $f(x)$ is a polynomial, then $\textbf{f}$ is its associated codeword. This codeword is also dependent on $\boldsymbol\alpha \text{and} \textbf{v}$. We can write
+
+\begin{center}
+$\textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x)) = (v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))$,
+\end{center}
+where $f = \textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x))$ when the polynomial $f(x)$ is evaluated at $\boldsymbol\alpha$ and scaled by $\textbf{v}$.
+
+The distance between two codewords is defined as the number of symbols in which the sequences differ, in other words it is the Hamming distance. The minimum distance between two codewords for GRS codes is
+
+\begin{center}
+$\text{d}_{\text{min}} = n - k + 1$.
+\end{center}
+
+A key concept is that any codeword which has up to $k$ entries equal to 0 corresponds to a polynomial of degree less than $k$ whose values matching the 0 polynomial in $k$ points must be the 0 polynomial. This is true since any polynomial of degree less than $k$ is uniquely determined by its values at $k$ distinct points. Which means that for any $n$-tuple $\textbf{f}$, we can reconstruct the polynomial $f(x)$ of degree less than $n$ such that $\textbf{f} = \textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x))$. Let
+
+\begin{center}
+$L(x) = \prod\limits_{i=1}^{n} (x - \alpha_{i})$
+\end{center}
+and
+\begin{center}
+$L_{i}(x) = L(x)/(x - \alpha_{i}) = \prod\limits_{j \neq i} (x - \alpha_{j})$.
+\end{center}
+Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. The vector $\textbf{f}$ has $i^{\text{th}}$ coordinate $v_{i}f(\alpha_{i})$. This is enough information to use Lagrange interpolation [insert reference to Lagrange interpolation here] to calculate
+
+\begin{center}
+$f(x) = \sum\limits_{i=1}^{n} \dfrac{L_{i}(x)}{L_{i}(\alpha_{i})}f(\alpha_{i})$.
+\end{center}
 
 \section{Definitions}
+Before we delve into encoding and decoding a Reed-Solomon Code, there are many terms that we need to define.
 
 \section{Encoding}
 
