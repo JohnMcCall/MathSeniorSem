@@ -9,11 +9,25 @@
 
 \maketitle
 
-\section{Introduction}
-Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as
+\section{Definitions}
+Before we delve into encoding and decoding a Reed-Solomon Code, there are several terms that we need to define. First, a \textit{generator matrix} of an $[n,k]$ linear code $C$ over a field $F$ is a $k \times n$ matrix $G$ with $C$ equal to the row space of $G$. 
 
+The \textit{dual code} of a code $C$, denoted $C^{\perp}$ is the code
 \begin{center}
-$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v}) = \{(v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))\;|\;f(x) \in F[x]_{k}\}$.
+$C^{\perp} = \{\textbf{x} \in F^{n} \mid \textbf{x} \cdot \textbf{c} = 0, \text{ for all } c \in C\}$
+\end{center}
+where $\textbf{x} \cdot \textbf{c}$ is the usual dot product. If $C$ is a linear code, then $C^{\perp \perp} = C$. Dual codes are useful because they possess the property that if $G$ is a generator matrix for $C$ then $\textbf{x}$ is in $C$ if and only if $G\textbf{x}^{\mathsf{T}} = \textbf{0}$.
+
+The generator matrix $H$ for the dual code $C^{\perp}$ of linear code $C$ is called a \textit{check matrix} for $C$. Since $C^{\perp \perp} = C$, we can use the check matrix $H$ for $C$ to define $C$ as:
+\begin{center}
+$C = \{\textbf{x} \mid H\textbf{x}^{\mathsf{T}} = \textbf{0}\}$.
+\end{center}
+Often a code is defined using a check matrix. [Insert example here?]
+
+\section{Reed-Solomon Basics}
+Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as:
+\begin{center}
+$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v}) = \{(v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))\;\mid\;f(x) \in F[x]_{k}\}$.
 \end{center}
 Here $F[x]_{k}$ is the set of polynomials in $F[x]$ with degree less than $k$. If $f(x)$ is a polynomial, then $\textbf{f}$ is its associated codeword. This codeword is also dependent on $\boldsymbol\alpha \text{and} \textbf{v}$. We can write
 
@@ -37,16 +51,21 @@ and
 \begin{center}
 $L_{i}(x) = L(x)/(x - \alpha_{i}) = \prod\limits_{j \neq i} (x - \alpha_{j})$.
 \end{center}
-Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. The vector $\textbf{f}$ has $i^{\text{th}}$ coordinate $v_{i}f(\alpha_{i})$. This is enough information to use Lagrange interpolation [insert reference to Lagrange interpolation here] to calculate
-
+Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. Since the $i^{\text{th}}$ coordinate of vector $\textbf{f}$ is $v_{i}f(\alpha_{i})$ we can use Lagrange interpolation [insert reference to Lagrange interpolation here] to calculate
 \begin{center}
 $f(x) = \sum\limits_{i=1}^{n} \dfrac{L_{i}(x)}{L_{i}(\alpha_{i})}f(\alpha_{i})$.
 \end{center}
 
-\section{Definitions}
-Before we delve into encoding and decoding a Reed-Solomon Code, there are many terms that we need to define.
+The polynomial $f(x)$ has degree less than $k$, while the interpolation polynomial of the righthand side has degree of $n - 1$. The solution to this problem allows us to calculate the dual of a GRS code more easily. Hall gives a theorem in Chapter 5 of \textit{Notes on Coding Theory} stating that:
+\begin{center}
+$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})^{\perp} = \text{GRS}_{n,n - k}(\boldsymbol\alpha, \textbf{u})$,
+\end{center}
+where $\textbf{u} = (u_{1},...,u_{n}) \text{ with } u_{i}^{-1} = v_{i}\prod\limits_{j \neq i} (\alpha_{i} - \alpha_{j})$.
+
+To verify that $\textbf{f}$ is a codeword in $C = \text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ it is not necessary to compare it to every $\textbf{g} \text{ of } C^{\perp} = \text{GRS}_{n,n-k}(\boldsymbol\alpha, \textbf{v})$. Instead, we can use a basis of $C^{\perp}$, which is also a check matrix for $C$. Using a check matrix to define a linear code has its benefits. One such benefit is that it will allow us to use \textit{syndrome decoding}, which will be discussed in more detail in a later section.
 
 \section{Encoding}
+
 
 \section{Decoding}
 
