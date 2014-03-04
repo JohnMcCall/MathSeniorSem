@@ -71,7 +71,7 @@ The generating polynomial for a Reed-Solomon code is of the following form:
 \begin{center}
 $g(x) = g_{0} + g_{1}x + g_{2}x^{2} + ... + g_{r - 1}x^{r - 1} + x^{r}$
 \end{center}
-Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. 
+Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. Because the generator polynomial has degree $r$, there are exactly $r$ successive powers of $a$ that are roots of the polynomial. We denote the roots of $g(x)$ as $a, a^{2},...a^{r}$.
 
 \section{Decoding}
 Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses the dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission. 
