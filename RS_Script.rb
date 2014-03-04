@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require "rubygems"
+require "polynomial"
+
 class Encoder
 
     def initialize()
@@ -13,10 +16,26 @@ class Encoder
                             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
                             'X', 'Y', 'Z', '[', '\\', ']', '^', '_']
 
+        @replacements = [Polynomial.new(1, 1), Polynomial.new(0, 1, 1), 
+                         Polynomial.new(0, 0, 1, 1), Polynomial.new(0, 0, 0, 1, 1), 
+                         Polynomial.new(0, 0, 0, 0, 1, 1)]
+
+        @polys = [Polynomial.new(0,0,0,0,0,0,1), Polynomial.new(0,0,0,0,0,0,0,1), 
+                  Polynomial.new(0,0,0,0,0,0,0,0,1), Polynomial.new(0,0,0,0,0,0,0,0,0,1), 
+                  Polynomial.new(0,0,0,0,0,0,0,0,0,0,1)]
+
     end
 
     def getValidCharacters()
         @validCharacters
+    end
+
+    def getReplacements()
+        @replacements
+    end
+
+    def getPolys()
+        @polys
     end
 
     def encode(char)
@@ -27,14 +46,41 @@ class Encoder
         int + 0x20
     end
 
+    # Addition of two encoded characters
+    def add(ec1, ec2)
+        ec1 ^ ec2
+    end
+
+    # reduce the degree of a polynomial using the fact that x^6 = x + 1
+    def reduce(poly)
+        degree = poly.degree()
+        newPoly = Polynomial.new()
+
+        while degree > 5 do
+            newPoly = reduceHelper(poly, degree)
+            degree = newPoly.degree()
+        end
+
+        newPoly
+    end
+
+    def reduceHelper(poly, degree)
+        replacement = @replacements[degree - 6]
+        newPoly = poly.-(@polys[degree - 6])
+        newPoly.+(replacement)
+    end
+
 end
 
 
 encoder = Encoder.new
 
 vc = encoder.getValidCharacters
+replacements = encoder.getReplacements
 
 vc.each do |x|
-    var = encoder.encode(x)
-    puts x + " " + var.to_s() + " " + encoder.decode(var).chr
+    #var = encoder.encode(x)
+    #puts x + " " + var.to_s() + " " + encoder.decode(var).chr
 end
+
+p encoder.reduceHelper(Polynomial.new(1,1,0,0,0,0,0,0,1), 8).to_s
