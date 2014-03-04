@@ -46,18 +46,53 @@ class Encoder
         int + 0x20
     end
 
+    def binaryToPoly(binary)
+        binaryArray = binary.to_s(2).split(//)
+        binaryArray = binaryArray.map! {|x| x.to_i}
+        binaryArray = binaryArray.reverse
+        Polynomial[binaryArray]
+    end
+
+    def polyToBinary(poly)
+        coefs = poly.coefs
+        coefs = coefs.reverse
+        coefs = coefs.map! {|x| x.to_s}
+        binary = coefs.join
+        binary.to_i(2)
+    end
+
     # Addition of two encoded characters
     def add(ec1, ec2)
         ec1 ^ ec2
     end
 
+    def multiply(ec1, ec2)
+        poly1 = binaryToPoly(ec1)
+        poly2 = binaryToPoly(ec2)
+
+        product = multiplyPolys(poly1, poly2)
+
+        polyToBinary(product)
+    end
+
+    # multiplies 2 polynomials with coefs in Z2
+    def multiplyPolys(poly1, poly2)
+        newPoly = poly1.*(poly2)
+
+        newPoly = mod2(newPoly)
+        newPoly = reduce(newPoly)
+        newPoly = mod2(newPoly)
+        
+        newPoly
+    end
+
     # reduce the degree of a polynomial using the fact that x^6 = x + 1
     def reduce(poly)
         degree = poly.degree()
-        newPoly = Polynomial.new()
+        newPoly = poly
 
         while degree > 5 do
-            newPoly = reduceHelper(poly, degree)
+            newPoly = reduceHelper(newPoly, degree)
             degree = newPoly.degree()
         end
 
@@ -70,6 +105,14 @@ class Encoder
         newPoly.+(replacement)
     end
 
+    # despite what this terrible name implies, all this function does
+    # is set all even coefficients to 0.
+    def mod2(poly)
+        coefs = poly.coefs.dup
+        coefs = coefs.map! {|x| x % 2}
+        Polynomial[coefs]
+    end
+
 end
 
 
@@ -78,9 +121,23 @@ encoder = Encoder.new
 vc = encoder.getValidCharacters
 replacements = encoder.getReplacements
 
+print "  "
 vc.each do |x|
-    #var = encoder.encode(x)
-    #puts x + " " + var.to_s() + " " + encoder.decode(var).chr
+    print x + " "
+    
 end
 
-p encoder.reduceHelper(Polynomial.new(1,1,0,0,0,0,0,0,1), 8).to_s
+puts
+
+vc.each do |x|
+    xBin = encoder.encode(x)
+    print x
+    vc.each do |y|
+        yBin = encoder.encode(y)
+        product = encoder.multiply(xBin, yBin)
+        print " " + encoder.decode(product).chr
+    end
+    puts
+end
+
+
