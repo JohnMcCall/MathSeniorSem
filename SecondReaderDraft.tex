@@ -12,6 +12,7 @@
 \maketitle
 
 \section{Abstract}
+Coming Soon.
 
 \section{Introduction}
 
@@ -77,11 +78,13 @@ where $\textbf{u} = (u_{1},...,u_{n}) \text{ with } u_{i}^{-1} = v_{i}\prod\limi
 To verify that $\textbf{f}$ is a codeword in $C = \text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ it is not necessary to compare it to every $\textbf{g} \text{ of } C^{\perp} = \text{GRS}_{n,n-k}(\boldsymbol\alpha, \textbf{v})$. Instead, we can use a basis of $C^{\perp}$, which is also a check matrix for $C$. Using a check matrix to define a linear code has its benefits. One such benefit is that it will allow us to use \textit{syndrome decoding}, which will be discussed in more detail in a later section.
 
 \subsection{Encoding GRS Codes}
+A GRS code is composed of two parts. The first part is the actual message that we are sending. For us that message is: "THIS IS MAJOR TOM", not including the quotation marks.
+
 The generating polynomial for a Reed-Solomon code is of the following form:
 \begin{center}
 $g(x) = g_{0} + g_{1}x + g_{2}x^{2} + ... + g_{r - 1}x^{r - 1} + x^{r}$
 \end{center}
-Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. Because the generator polynomial has degree $r$, there are exactly $r$ successive powers of $a$ that are roots of the polynomial. We denote the roots of $g(x)$ as $a, a^{2},...a^{r}$.
+Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. For us, that means the number of symbols, not the number of bits. Since the generator polynomial has degree $r$, there are exactly $r$ successive powers of $a$ that are roots of the polynomial. We denote the roots of $g(x)$ as $a, a^{2},...a^{r}$.
 
 \subsection{Decoding GRS Codes}
 Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses the dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission. 
@@ -163,5 +166,7 @@ Using this characterization we can solve the Key Equation using the Euclidean al
 If the error vector exists, then $\Hat{\sigma}(z) = \Tilde{\sigma}(0)^{-1}\Tilde{\sigma}(z)$ and $\Hat{\omega}(z) = \Tilde{\sigma}(0)^{-1}\Tilde{\omega}(z)$ are the error locator and error evaluator polynomials for $\textbf{e}$. However, there are a few stipulations. The number of roots of $\Hat{\sigma}(z)$ among the $\alpha_{i}^{-1}$ must be equal to the degree of $\Hat{\sigma}(z)$. If this is not the case, that means we have detected errors which we cannot correct. Also, if $t_{j}(0) = 0$ we cannot perform the final division to determine $\Hat{\sigma}(z)$.
 
 If $t_{j}(0) \neq 0$ and $\Hat{\sigma}(z)$ has the correct number of roots, then we can evaluate errors at each location to find a vector of weight at most $r/2$ with our original syndrome. At this point we have either decoded correctly, or we had more than $r/2$ errors and could not decode properly.
+
+\section{Conclusion}
 
 \end{document}
