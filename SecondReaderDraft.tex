@@ -1,0 +1,167 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm2e}
+
+\title{Error Correction Codes}
+\author{John McCall\\Adviser: Peter Dolan}
+
+\begin{document}
+\RestyleAlgo{boxruled}
+
+\maketitle
+
+\section{Abstract}
+
+\section{Introduction}
+
+\section{Codes}
+
+\subsection{Linear Codes}
+
+\section{Generalized Reed-Solomon Codes}
+
+\subsection{Definitions}
+Before we delve into encoding and decoding a Reed-Solomon Code, there are several terms that we need to define. First, a \textit{generator matrix} of an $[n,k]$ linear code $C$ over a field $F$ is a $k \times n$ matrix $G$ with $C$ equal to the row space of $G$. 
+
+The \textit{dual code} of a code $C$, denoted $C^{\perp}$ is the code
+\begin{center}
+$C^{\perp} = \{\textbf{x} \in F^{n} \mid \textbf{x} \cdot \textbf{c} = 0, \text{ for all } c \in C\}$
+\end{center}
+where $\textbf{x} \cdot \textbf{c}$ is the usual dot product. If $C$ is a linear code, then $C^{\perp \perp} = C$. Dual codes are useful because they possess the property that if $G$ is a generator matrix for $C$ then $\textbf{x}$ is in $C$ if and only if $G\textbf{x}^{\mathsf{T}} = \textbf{0}$.
+
+The generator matrix $H$ for the dual code $C^{\perp}$ of linear code $C$ is called a \textit{check matrix} for $C$. Since $C^{\perp \perp} = C$, we can use the check matrix $H$ for $C$ to define $C$ as:
+\begin{center}
+$C = \{\textbf{x} \mid H\textbf{x}^{\mathsf{T}} = \textbf{0}\}$.
+\end{center}
+Often a code is defined using a check matrix. [Insert example here?]
+
+\subsection{The Basics}
+Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as:
+\begin{center}
+$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v}) = \{(v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))\;\mid\;f(x) \in F[x]_{k}\}$.
+\end{center}
+Here $F[x]_{k}$ is the set of polynomials in $F[x]$ with degree less than $k$. If $f(x)$ is a polynomial, then $\textbf{f}$ is its associated codeword. This codeword is also dependent on $\boldsymbol\alpha \text{ and } \textbf{v}$. We can write
+
+\begin{center}
+$\textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x)) = (v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))$,
+\end{center}
+where $f = \textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x))$ when the polynomial $f(x)$ is evaluated at $\boldsymbol\alpha$ and scaled by $\textbf{v}$.
+
+The distance between two codewords is defined as the number of symbols in which the sequences differ, in other words it is the Hamming distance. The minimum distance between two codewords for GRS codes is
+
+\begin{center}
+$\text{d}_{\text{min}} = n - k + 1$.
+\end{center}
+
+A key concept is that any codeword which has up to $k$ entries equal to 0 corresponds to a polynomial of degree less than $k$ whose values matching the 0 polynomial in $k$ points must be the 0 polynomial. This is true since any polynomial of degree less than $k$ is uniquely determined by its values at $k$ distinct points. Which means that for any $n$-tuple $\textbf{f}$, we can reconstruct the polynomial $f(x)$ of degree less than $n$ such that $\textbf{f} = \textbf{ev}_{\boldsymbol\alpha,\textbf{v}}(f(x))$. Let
+
+\begin{center}
+$L(x) = \prod\limits_{i=1}^{n} (x - \alpha_{i})$
+\end{center}
+and
+\begin{center}
+$L_{i}(x) = L(x)/(x - \alpha_{i}) = \prod\limits_{j \neq i} (x - \alpha_{j})$.
+\end{center}
+Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. Since the $i^{\text{th}}$ coordinate of vector $\textbf{f}$ is $v_{i}f(\alpha_{i})$ we can use Lagrange interpolation [insert reference to Lagrange interpolation here] to calculate
+\begin{center}
+$f(x) = \sum\limits_{i=1}^{n} \dfrac{L_{i}(x)}{L_{i}(\alpha_{i})}f(\alpha_{i})$.
+\end{center}
+
+The polynomial $f(x)$ has degree less than $k$, while the interpolation polynomial of the righthand side has degree of $n - 1$. The solution to this problem allows us to calculate the dual of a GRS code more easily. Hall gives a theorem in Chapter 5 of \textit{Notes on Coding Theory} stating that:
+\begin{center}
+$\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})^{\perp} = \text{GRS}_{n,n - k}(\boldsymbol\alpha, \textbf{u})$,
+\end{center}
+where $\textbf{u} = (u_{1},...,u_{n}) \text{ with } u_{i}^{-1} = v_{i}\prod\limits_{j \neq i} (\alpha_{i} - \alpha_{j})$.
+
+To verify that $\textbf{f}$ is a codeword in $C = \text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ it is not necessary to compare it to every $\textbf{g} \text{ of } C^{\perp} = \text{GRS}_{n,n-k}(\boldsymbol\alpha, \textbf{v})$. Instead, we can use a basis of $C^{\perp}$, which is also a check matrix for $C$. Using a check matrix to define a linear code has its benefits. One such benefit is that it will allow us to use \textit{syndrome decoding}, which will be discussed in more detail in a later section.
+
+\subsection{Encoding GRS Codes}
+The generating polynomial for a Reed-Solomon code is of the following form:
+\begin{center}
+$g(x) = g_{0} + g_{1}x + g_{2}x^{2} + ... + g_{r - 1}x^{r - 1} + x^{r}$
+\end{center}
+Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. Because the generator polynomial has degree $r$, there are exactly $r$ successive powers of $a$ that are roots of the polynomial. We denote the roots of $g(x)$ as $a, a^{2},...a^{r}$.
+
+\subsection{Decoding GRS Codes}
+Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses the dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission. 
+
+The code $\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ over $F$ is equal to the set of all $n$-tuples $\textbf{c} = (c_{1},c_{2},...,c_{n}) \in F^{n}$ such that:
+\begin{center}
+$\sum\limits_{i = 1}^{n} \dfrac{c_{i}u_{i}}{1 - \alpha_{i}z} = 0$ (mod $z^{r}$),
+\end{center}
+where $r = n - k \text{ and } u_{i}^{-1} = v_{i}\prod\limits_{j \neq i} (\alpha_{i} - \alpha_{j})$. This is known as the \textit{Goppa formulation for GRS codes}. The Goppa formulation is simply another way of writing our code, but there are benefits to using this formulation as we will see below.
+
+If $\textbf{c} = (c_{1},c_{2},...,c_{n})$, a GRS code in the Goppa formulation, is transmitted, and $\textbf{p} = (p_{1},p_{2},...,p_{n})$ is received, then there is some vector $\textbf{e} = (e_{1},e_{2},...e_{n})$ such that $\textbf{p} = \textbf{c} + \textbf{e}$. This vector is called the error vector. We can then calculate the \textit{syndrome polynomial} of \textbf{p}:
+\begin{center}
+$S_{\textbf{p}}(z) = \sum\limits_{i=1}^{n} \dfrac{p_{i}u_{i}}{1 - \alpha_{i}^{z}}$ (mod $z^{r}$).
+\end{center}
+We can do the same for $\textbf{c}$ and $\textbf{e}$ as well. The following equation holds true:
+\begin{center}
+$S_{\textbf{p}}(z) = S_{\textbf{c}}(z) + S_{\textbf{e}}(z)$ (mod $z^{r}$).
+\end{center}
+Since $\textbf{c}$ is in the Goppa formulation
+\begin{center}
+$S_{\textbf{c}}(z) = \sum\limits_{i = 1}^{n} \dfrac{c_{i}u_{i}}{1 - \alpha_{i}z} = 0$,
+\end{center}
+so we write:
+\begin{center}
+$S_{\textbf{p}}(z) = S_{\textbf{e}}(z)$ (mod $z^{r}$).
+\end{center}
+Let $B$ be the set of error locations:
+\begin{center}
+$B =  \{i \mid e_{i} \neq 0\}$.
+\end{center}
+Then the syndrome polynomial reduces further to:
+\begin{center}
+$S_{\textbf{p}}(z) = S_{\textbf{e}}(z) = \sum\limits_{b \in B} \dfrac{e_{b}u_{b}}{1 - \alpha_{b}z} $ (mod $z^{r}$).
+\end{center}
+We can drop the subscripts and just write $S(z)$ for the syndrome polynomial.
+
+The next step is to find the \textit{Key Equation}. This is done by clearing the denominators:
+\begin{center}
+$\sigma(z)S(z) = \omega(z)$ (mod $z^{r}$),
+\end{center}
+where
+\begin{center}
+$\sigma(z) = \sigma_{\textbf{e}}(z) = \prod\limits_{b \in B} (1 - \alpha_{b}z)$
+\end{center}
+and
+\begin{center}
+$\omega(z) = \omega{\textbf{e}}(z) = \sum\limits_{b \in B} e_{b}u_{b}\left(\prod\limits_{a \in B, a \neq b} (1 - \alpha_{a}z)\right)$.
+\end{center}
+The polynomial $\sigma(z)$ is called the \textit{error locator}, and the polynomial $\omega(z)$ is called the \textit{error evaluator}.
+
+We can determine the error vector $\textbf{e}$ given $\sigma(z) \text{ and } \omega(z)$. If we assume for now that none of the $a_{i}$ equal 0, then:
+\begin{center}
+$B = {b \mid \sigma(a_{b}^{-1}) = 0}$
+\end{center}
+and, for each $b \in B$,
+\begin{center}
+$e_{b} = \dfrac{-\alpha_{b}\omega(\alpha_{b}^{-1})}{u_{b}\sigma'(\alpha_{b}^{-1})}$,
+\end{center}
+where $\sigma'(z)$ is the derivative of $\sigma(z)$. It can be shown that the polynomials $\sigma(z)$ and $\omega(z)$ determine the error vector even when some $\alpha_{i}$ is 0.
+
+This method of decoding requires us to solve the Key Equation in order to find the error vector. The following theorem gives us a characterization of $\sigma(z)$ and $\omega(z)$, helping us solve the Key Equation.
+
+\textit{Given $r$ and $S(z) \in F[z]$ there is at most one pair of polynomials $\sigma(z),\omega(z) \in F[z]$ satisfying}:
+\begin{enumerate}
+	\item $\sigma(z)S(z) = \omega(z)$ (mod $z^{r}$);
+	\item deg$(\sigma(z)) \le r/2$ and deg$(\omega(z)) < r/2$;
+	\item gcd$(\sigma(z),\omega(z)) = 1$ and $\sigma(0) = 1$.
+\end{enumerate}
+
+Using this characterization we can solve the Key Equation using the Euclidean algorithm. For a code $\text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ over $F$, with $r = n - k$, given a syndrome polynomial $S(z)$, the following algorithm halts, producing $\Tilde{\sigma}(z)$ and $\Tilde{\omega}(z)$:
+\begin{algorithm}[H]
+	\caption{Decoding GRS using the Euclidean Algorithm\label{decoding}}
+	Set $a(z) = z^{r}$ and $b(z) = S(z)$.
+	
+	Step through the Euclidean Algorithm until at Step $j$, deg$(r_{j}(z)) < r/2$.
+	
+	Set $\Tilde{\sigma}(z) = t_{j}(z)$ and $\Tilde{\omega}(z) = r_{j}(z)$.
+\end{algorithm}
+If the error vector exists, then $\Hat{\sigma}(z) = \Tilde{\sigma}(0)^{-1}\Tilde{\sigma}(z)$ and $\Hat{\omega}(z) = \Tilde{\sigma}(0)^{-1}\Tilde{\omega}(z)$ are the error locator and error evaluator polynomials for $\textbf{e}$. However, there are a few stipulations. The number of roots of $\Hat{\sigma}(z)$ among the $\alpha_{i}^{-1}$ must be equal to the degree of $\Hat{\sigma}(z)$. If this is not the case, that means we have detected errors which we cannot correct. Also, if $t_{j}(0) = 0$ we cannot perform the final division to determine $\Hat{\sigma}(z)$.
+
+If $t_{j}(0) \neq 0$ and $\Hat{\sigma}(z)$ has the correct number of roots, then we can evaluate errors at each location to find a vector of weight at most $r/2$ with our original syndrome. At this point we have either decoded correctly, or we had more than $r/2$ errors and could not decode properly.
+
+\end{document}
