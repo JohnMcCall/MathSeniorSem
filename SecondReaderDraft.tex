@@ -3,7 +3,7 @@
 \usepackage{amsfonts}
 \usepackage{algorithm2e}
 
-\title{Error Correction Codes}
+\title{Error Correcting Codes}
 \author{John McCall\\Adviser: Peter Dolan}
 
 \begin{document}
@@ -15,14 +15,25 @@
 Coming Soon.
 
 \section{Introduction}
+Communication plays a huge role in today's society. Electronic forms of communication become more prevalent every year. Whether it is listening to a CD in the car, reading an article on the internet, or talking with a friend via a cell phone, electronic communication impacts our everyday lives. However, these forms of communication are not always perfect. For instance, that CD could get scratched and some of its data will be lost. Error correcting codes are a way of coping with this loss. 
+
+The idea behind error correcting codes is to encode and transmit the data with a sufficient amount of redundancy to be able to reconstruct any data that may get lost. This is why even if that CD gets some minor scratches it will still be able to play perfectly. Again, these codes are not perfect. If that scratch is too large, some of the data will be irrecoverable and there will be a noticeable effect on the music playing.
+
+In section 1 we will introduce coding theory and give examples of some codes. In section 2 we will go into detail about Generalized Reed-Solomon codes and will walk through an example.
 
 \section{Codes}
+A \textit{code} is a rule for converting information (usually a letter or word) into another representation. Oftentimes, this other representation is of a different form. \textit{Encoding} is the actual act of conversion. A simple code would be to map each letter of the alphabet to a number. For instance, ``A" maps to ``1", ``B" maps to ``2", etc. In this example, the letters are our \textit{source alphabet}, and the numbers are our \textit{target alphabet}. To encode the word ``ALGEBRA" we would simply replace all the letters with the appropriate numbers. In this case, ``112752171" is the result. The act of \textit{decoding} reverses the code and returns the word to its original state.
+
+Codes are very useful when storing data, or transmitting it over long distances, as they provide an easy, consistent, way of representing data. However, this data may be corrupted in transmission. \textit{Random errors} are a type of error that corrupts individual symbols during transmissions. Corruption, in this context, means changing the symbol to another symbol in our alphabet. Going back to our example, if two random errors occur during transmission, our word may arrive as: ``117712171". A ``2" was replaced with a ``7" and a ``5" was replaced with a ``1". As a result our decoded word is: ``ARGABRA". A \textit{burst error} is when a large chunk of symbols in a row become corrupted. These can be particularly troublesome as oftentimes the original word is completely unrecognizable.
+
+Codes that can detect these error are called \textit{error detecting} codes. Codes that can correct these errors are called \textit{error correcting} codes. To reiterate, there is no perfect code which can correct or detect all errors. The ability to correct even a small amount of errors is better than the alternative of having to retransmit the data every time an error occurs.
+
+\subsection{Cyclic Redundancy Check}
+A \textit{cyclic redundancy check (CRC)} is a type of error detecting code used to detect accidental changes in data. To detect an error, a fixed length \textit{check value} is appended to the end of the message. The check value is based on the remainder of a polynomial division of the messages contents. When the message is received the check value is recomputed and the appropriate measures to fix the corruption can be taken if the two values do not match.
 
 \subsection{Linear Codes}
+Talk about Linear Codes
 
-\section{Generalized Reed-Solomon Codes}
-
-\subsection{Definitions}
 Before we delve into encoding and decoding a Reed-Solomon Code, there are several terms that we need to define. First, a \textit{generator matrix} of an $[n,k]$ linear code $C$ over a field $F$ is a $k \times n$ matrix $G$ with $C$ equal to the row space of $G$. 
 
 The \textit{dual code} of a code $C$, denoted $C^{\perp}$ is the code
@@ -36,6 +47,8 @@ The generator matrix $H$ for the dual code $C^{\perp}$ of linear code $C$ is cal
 $C = \{\textbf{x} \mid H\textbf{x}^{\mathsf{T}} = \textbf{0}\}$.
 \end{center}
 Often a code is defined using a check matrix. [Insert example here?]
+
+\section{Generalized Reed-Solomon Codes}
 
 \subsection{The Basics}
 Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as:
