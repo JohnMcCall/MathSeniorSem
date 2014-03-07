@@ -19,22 +19,95 @@ Communication plays a huge role in today's society. Electronic forms of communic
 
 The idea behind error correcting codes is to encode and transmit the data with a sufficient amount of redundancy to be able to reconstruct any data that may get lost. This is why even if that CD gets some minor scratches it will still be able to play perfectly. Again, these codes are not perfect. If that scratch is too large, some of the data will be irrecoverable and there will be a noticeable effect on the music playing.
 
-In section 1 we will introduce coding theory and give examples of some codes. In section 2 we will go into detail about Generalized Reed-Solomon codes and will walk through an example.
+In section 1 will provide the necessary abstract algebra background to understand the remainder of the paper. Section 2 will introduce coding theory and give examples of some codes. In section 3 we will go into detail about Generalized Reed-Solomon codes and will walk through an example.
+
+\section{Background}
+This section will provide all the necessary background in abstract algebra that is needed to understand Generalized Reed-Solomon codes. Specifically it will define groups, cyclic groups, rings and fields. Introduce the finite field GF(2) as well as the extension field GF($2^{m}$). Then it will describe how addition and multiplication works in this field.
+
+\subsection{Groups, Rings, and Fields}
+
+\subsection{Addition and Multiplication in GF($2^{m}$)}
 
 \section{Codes}
 A \textit{code} is a rule for converting information (usually a letter or word) into another representation. Oftentimes, this other representation is of a different form. \textit{Encoding} is the actual act of conversion. A simple code would be to map each letter of the alphabet to a number. For instance, ``A" maps to ``1", ``B" maps to ``2", etc. In this example, the letters are our \textit{source alphabet}, and the numbers are our \textit{target alphabet}. To encode the word ``ALGEBRA" we would simply replace all the letters with the appropriate numbers. In this case, ``112752171" is the result. The act of \textit{decoding} reverses the code and returns the word to its original state.
 
-Codes are very useful when storing data, or transmitting it over long distances, as they provide an easy, consistent, way of representing data. However, this data may be corrupted in transmission. \textit{Random errors} are a type of error that corrupts individual symbols during transmissions. Corruption, in this context, means changing the symbol to another symbol in our alphabet. Going back to our example, if two random errors occur during transmission, our word may arrive as: ``117712171". A ``2" was replaced with a ``7" and a ``5" was replaced with a ``1". As a result our decoded word is: ``ARGABRA". A \textit{burst error} is when a large chunk of symbols in a row become corrupted. These can be particularly troublesome as oftentimes the original word is completely unrecognizable.
+Codes are very useful when storing data, or transmitting it over long distances, as they provide an easy, consistent, way of representing data. However, this data may be corrupted in transmission. \textit{Random errors} are a type of error that corrupts individual symbols during transmissions. Corruption, in this context, means changing the symbol to another symbol in our alphabet. Going back to our example, if two random errors occur during transmission, our word may arrive as: ``117712171". A ``2" was replaced with a ``7" and a ``5" was replaced with a ``1". As a result our decoded word is: ``ARGABRA". A \textit{burst error} is when a large chunk of symbols in a row become corrupted. These can be particularly troublesome as they can corrupt a large portion of the data, and are common in several types of communication channels.
 
 Codes that can detect these error are called \textit{error detecting} codes. Codes that can correct these errors are called \textit{error correcting} codes. To reiterate, there is no perfect code which can correct or detect all errors. The ability to correct even a small amount of errors is better than the alternative of having to retransmit the data every time an error occurs.
 
 \subsection{Cyclic Redundancy Check}
-A \textit{cyclic redundancy check (CRC)} is a type of error detecting code used to detect accidental changes in data. To detect an error, a fixed length \textit{check value} is appended to the end of the message. The check value is based on the remainder of a polynomial division of the messages contents. When the message is received the check value is recomputed and the appropriate measures to fix the corruption can be taken if the two values do not match.
+An example of an actual code used in the field is a \textit{cyclic redundancy check (CRC)}. A CRC is a type of error detecting code used to detect accidental changes in data. To detect an error, a fixed length \textit{check value} is appended to the end of the message. The check value is based on the remainder of a polynomial division of the messages contents. When the message is received the check value is recomputed and the appropriate measures to fix the corruption can be taken if the two values do not match.
+
+CRCs are commonly used because they are easy to implement in binary hardware, easy to analyze, and are quite good at detecting burst errors. Usually, an $n$-bit CRC used on an arbitrary length message will detect any single burst error less than or equal to $n$ bits and will detect a fraction $1 - 2^{-n}$ of all longer burst errors. 
+
+The specification of a CRC code requires a \textit{generator polynomial}. This polynomial is the divisor in polynomial long division, the dividend is the message, the quotient is thrown away, and the remainder becomes the result. It is important to note that the coefficients of the polynomial are computed using the carry-less arithmetic of a 
+finite field. Most CRCs use the finite field GF(2) in practice as this field only has two elements, 0 and 1, which meshes nicely with the architecture of computers.
+
+A CRC is called an $n$-bit CRC when its check value has $n$ bits. Any $n$ has multiple CRCs, each with a different polynomial. Any such polynomial has highest degree $n$, which means that it has $n + 1$ terms, and that its encoding requires $n + 1$ bits. A CRC and associated polynomial are given a name of the form CRC-$n$-XXX. The simplest CRC is CRC-1 and it uses the generator polynomial $x + 1$. This is also called a parity bit, which is the simplest form of error detection.
+
+\subsubsection{Application and Integrity}
+A device that implements a CRC calculates the check value for each data block to be sent or stored and appends it to the end of the block. This forms a \textit{codeword}. When a codeword is read or received the device does one of two things. It either recalculates the check value of the data block and compares it to the check value from the codeword, or it performs a CRC on the entire codeword and compares the resulting check value with an expected \textit{residue} constant. If the check values do not match the block contains some errors in its data and the device may take corrective actions. However, because of the nature of error-checking, it is possible that some errors may remain undetected, even if the check values match. 
+
+CRCs are designed to protect accidental errors incurred from communication channels, and can give assurance of the integrity of delivered messages. CRCs are not suitable when it comes to protecting against intentional modification of data for several reasons. There is no authentication so an attacker can edit the message and recompute the CRC without being detected. CRC is easily reversible which makes it unsuitable for use in digital signatures. Finally, CRC is a linear function with a property that $crc(x \oplus y) = crc(x) \oplus crc(y)$. Because of this, even if the CRC is encrypted with a stream cipher, the message and its CRC can be altered without knowledge of the encryption key. 
+
+\subsubsection{Computing a CRC}
+To compute an $n$-bit binary CRC, start with the message encoded in binary:
+\begin{verbatim}
+11010011101100
+\end{verbatim}
+This is padded with $n$ zeroes, corresponding to the bit length $n$ of the CRC. The first calculation for a 3-bit CRC is as follows:
+\begin{verbatim}
+11010011101100 000 <--- input padded with 3 bits
+1011               <--- divisor (4 bits) 
+------------------
+01100011101100 000
+\end{verbatim}
+If the input bit above the leftmost divisor bit is 0, do nothing. If the bit is 1, the divisor is XORed with the input. The divisor is then shifted one bit to the right. This process is repeated until the divisor reaches the right most bit of the input. The calculation in its entirety is:
+\begin{verbatim}
+11010011101100 000 <--- input padded with 3 bits
+1011               <--- divisor
+01100011101100 000 <--- result
+ 1011              <--- divisor ...
+00111011101100 000
+  1011
+00010111101100 000
+   1011
+00000001101100 000
+       1011
+00000000110100 000
+        1011
+00000000011000 000
+         1011
+00000000001110 000
+          1011
+00000000000101 000
+           101 1
+------------------
+00000000000000 100 <--- remainder (3 bits)
+\end{verbatim}
+
+In this case the leftmost bit in the divisor zeroes out all the bits in the input so all that's left is the remainder. To check the validity of the received message simply perform the computation again, but instead of padding the input with zeroes, add the check value instead. If there are no errors the remainder after this computation should be zero.
+\begin{verbatim}
+11010011101100 100 <--- input with check value
+1011               <--- divisor
+01100011101100 100 <--- result
+ 1011              <--- divisor ...
+00111011101100 100
+
+......
+  
+00000000001110 100
+          1011
+00000000000101 100 
+           101 1
+------------------
+                 0 <--- remainder
+\end{verbatim}
 
 \subsection{Linear Codes}
-Talk about Linear Codes
+A \textit{linear code} of length $n$ and rank $k$ is a linear subspace $C$ with dimension $K$ of the vector space $\mathbb{F}^{n}_{q}$ where $\mathbb{F}_{q}$ is the finite field with $q$ elements. For our purposes $q = 2$, we will only be using binary codes. The vectors in $C$ are called \textit{codewords}. The \textit{weight} of a codeword is the number of its nonzero elements. The \textit{distance} between two codewords is the number of elements in which they differ. This is called the \textit{Hamming distance}.
 
-Before we delve into encoding and decoding a Reed-Solomon Code, there are several terms that we need to define. First, a \textit{generator matrix} of an $[n,k]$ linear code $C$ over a field $F$ is a $k \times n$ matrix $G$ with $C$ equal to the row space of $G$. 
+Since $C$ is a linear subspace of $\mathbb{F}^{n}_{q}$, $C$ can be represented by a basis. A martix can be constructed from this basis where each row in the matrix is an element from the basis set. This martix is called the \textit{generator matrix} of $C$.
 
 The \textit{dual code} of a code $C$, denoted $C^{\perp}$ is the code
 \begin{center}
