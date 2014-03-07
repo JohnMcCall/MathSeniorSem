@@ -128,7 +128,7 @@ Reed-Solomon codes are a linear code. An $n$ length and $k$ dimension RS code is
 
 J. Hall presents, in \textit{Notes on Coding Theory}, generalized Reed-Solomon Codes. It is these generalized codes that we will be focusing on for the remainder of this paper. Below we will discuss the basic structure of these codes. After that we will go into detail about how to encode and decode a generalized Reed-Solomon Code.
 
-[There will also be an example to go along with this section in the future, unfortunately it did not make it into this version] 
+[There will also be an example to go along with this section in the future, unfortunately it is incomplete in this version] 
 
 \subsection{The Basics}
 Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as:
@@ -171,13 +171,20 @@ where $\textbf{u} = (u_{1},...,u_{n}) \text{ with } u_{i}^{-1} = v_{i}\prod\limi
 To verify that $\textbf{f}$ is a codeword in $C = \text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ it is not necessary to compare it to every $\textbf{g} \text{ of } C^{\perp} = \text{GRS}_{n,n-k}(\boldsymbol\alpha, \textbf{v})$. Instead, we can use a basis of $C^{\perp}$, which is also a check matrix for $C$. Using a check matrix to define a linear code has its benefits. One such benefit is that it will allow us to use \textit{syndrome decoding}, which will be discussed in more detail in a later section.
 
 \subsection{Encoding GRS Codes}
-A GRS code is composed of two parts. The first part is the actual message that we are sending.
+The field we are using to encode is GF($2^{6}$). This is the field of all 6 bit binary strings. Addition and multiplication work as described above in this field. This gives us 64 different symbols we can use in our source alphabet. For our example we chose to map 64 ASCII characters to the elements in GF($2^{6}$). Specifically, we mapped characters 32-95 inclusive. Because this map exists, we do not have to think directly about the binary strings underneath. We can write the elements of GF($2^{6}$) as those characters as well as perform the field operations on those characters. A Ruby script was used to generate an addition and multiplication table for these operations. The tables as well as the script can be seen in appendix A. 
 
-The generating polynomial for a Reed-Solomon code is of the following form:
+A GRS code is composed of two parts. The first part is the actual message that we are sending. The message is $n$ symbols long and can be written as an $n - 1$ degree polynomial. The second part is the parity symbols. There are $r = n - k$ parity symbols appended to the end of the message to be used to ensure correctness after transmission. 
+
+In order to find the parity symbols we need to use a generating polynomial. The generating polynomial for a Reed-Solomon code is of the following form:
 \begin{center}
 $g(x) = g_{0} + g_{1}x + g_{2}x^{2} + ... + g_{r - 1}x^{r - 1} + x^{r}$
 \end{center}
-Where $r = n - k$ is the number of parity symbols, and $r/2$ is the number of errors that can be corrected. For us, that means the number of symbols, not the number of bits. Since the generator polynomial has degree $r$, there are exactly $r$ successive powers of $a$ that are roots of the polynomial. We denote the roots of $g(x)$ as $a, a^{2},...a^{r}$.
+In order to calculate $g(x)$ we need to find an element, $a$ in our group which is a primitive element. Then,
+\begin{center}
+$g(x) = (x - a)(x - a^{2})...(x - a^{r})$
+\end{center}
+
+Once we've found $g(x)$ we can divide the original message polynomial by $g(x)$. The remainder of this division is the parity symbols which we then add to the end of the message. Now that the message is complete we can send it.
 
 \subsection{Decoding GRS Codes}
 Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses the dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission. 
