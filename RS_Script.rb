@@ -113,6 +113,22 @@ class Encoder
         Polynomial[coefs]
     end
 
+    # This method is given an encoded character
+    def isPrimitive(ec)
+        puts ec
+        
+        count = 1
+        currentEC = multiply(ec, ec)
+        while currentEC != ec do
+            puts currentEC
+            currentEC = multiply(currentEC, ec)
+            count += 1
+        end
+
+        puts "The count was: " + count.to_s
+
+    end
+
 end
 
 
@@ -121,23 +137,26 @@ encoder = Encoder.new
 vc = encoder.getValidCharacters
 replacements = encoder.getReplacements
 
-print "  "
-vc.each do |x|
-    print x + " "
+#encoder.isPrimitive(0b100)
+
+#print "  "
+#vc.each do |x|
+#    print x + " "
     
-end
+#end
 
-puts
+#puts
 
-vc.each do |x|
-    xBin = encoder.encode(x)
-    print x
-    vc.each do |y|
-        yBin = encoder.encode(y)
-        product = encoder.multiply(xBin, yBin)
-        print " " + encoder.decode(product).chr
-    end
-    puts
-end
+#vc.each do |x|
+#    xBin = encoder.encode(x)
+#    print x
+#    vc.each do |y|
+#        yBin = encoder.encode(y)
+#        product = encoder.add(xBin, yBin)
+#        print " " + encoder.decode(product).chr
+#    end
+
+#    puts
+#end
 
 
