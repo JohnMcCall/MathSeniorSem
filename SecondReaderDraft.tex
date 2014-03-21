@@ -4,7 +4,7 @@
 \usepackage{algorithm2e}
 
 \title{Error Correcting Codes}
-\author{John McCall\\Adviser: Peter Dolan}
+\author{John McCall\\Adviser: Peter Dolan\\Second Reader: David Roberts}
 
 \begin{document}
 \RestyleAlgo{boxruled}
@@ -22,9 +22,17 @@ The idea behind error correcting codes is to encode and transmit the data with a
 In section 1 we will provide the necessary abstract algebra background to understand the remainder of the paper. Section 2 will introduce coding theory and give examples of some codes. In section 3 we will go into detail about Generalized Reed-Solomon codes and will walk through an example.
 
 \section{Background}
-This section will provide all the necessary background in abstract algebra that is needed to understand Generalized Reed-Solomon codes. Specifically it will define groups, cyclic groups, rings and fields. Introduce the finite field GF(2) as well as the extension field GF($2^{m}$). Then it will describe how addition and multiplication works in this field.
+This section will provide all the necessary background in abstract algebra that is needed to understand Generalized Reed-Solomon codes. Specifically it will define groups, cyclic groups, rings and fields. Introduce the finite field GF(2) as well as the extension field GF($2^{m}$). Then it will describe how addition and multiplication behave in this field.
 
 \subsection{Groups, Rings, and Fields}
+A \textit{group} is a set, $G$, paired with a binary operation, usually denoted as $+ \text{ or } \cdot$. For now we will use $\cdot$. A group must have the following properties.
+\begin{enumerate}
+  \item $G$ must be closed under the operation. In otherwords, for any $a, b \in G, a \cdot b \in G$ as well.
+  \item The operation must be associative. So for all $a,b,c \in G$ we have $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.
+  \item There must be an identity element. This means that there exists an element $e \in G$ such that for all $a \in G, a \cdot e = e \cdot a \ a$. Traditionally, $e$ is written as $0$ if we are using $+$ to denote our operation or as $1$ if we are using $\cdot$.
+  \item Identity elements must exist. So for all $a \in G$ there exists an element $a^{-1} \in G$ such that $a \cdot a^{-1} = a^{-1} \cdot a = e$, the identity element.
+\end{enumerate}
+It is important to note that the operation does not need to be commutative.
 
 \subsection{Addition and Multiplication in GF($2^{m}$)}
 
@@ -268,6 +276,9 @@ If the error vector exists, then $\Hat{\sigma}(z) = \Tilde{\sigma}(0)^{-1}\Tilde
 If $t_{j}(0) \neq 0$ and $\Hat{\sigma}(z)$ has the correct number of roots, then we can evaluate errors at each location to find a vector of weight at most $r/2$ with our original syndrome. At this point we have either decoded correctly, or we had more than $r/2$ errors and could not decode properly.
 
 \section{Conclusion}
+[Coming Soon]
+
+\section{References}
 [Coming Soon]
 
 \end{document}
