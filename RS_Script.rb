@@ -129,6 +129,96 @@ class Encoder
 
     end
 
+    def printMultTable()
+        print "  "
+        @validCharacters.each do |x|
+            print x + " "
+            
+        end
+
+        puts
+
+        @validCharacters.each do |x|
+            xBin = encode(x)
+            print x
+            @validCharacters.each do |y|
+                yBin = encode(y)
+                product = multiply(xBin, yBin)
+                print " " + decode(product).chr
+            end
+
+            puts
+        end
+    end
+
+    def printAddTable()
+        print "  "
+        @validCharacters.each do |x|
+            print x + " "
+            
+        end
+
+        puts
+
+        @validCharacters.each do |x|
+            xBin = encode(x)
+            print x
+            @validCharacters.each do |y|
+                yBin = encode(y)
+                product = add(xBin, yBin)
+                print " " + decode(product).chr
+            end
+
+            puts
+        end
+    end
+
+    ## This needs a lot of work and in its current state is pretty much totally broken. Well, it
+    ## kinda works, but there are a lot of characters in Latex which I need to account for and I
+    ## have things I need to do before worrying about this.
+    def printLatexAddTable()
+        print "\\begin{tabular}{c |"
+        @validCharacters.each do |item|
+            print " c"
+        end
+        puts "}"
+        
+        print @validCharacters[0]
+        for i in 1...@validCharacters.length
+            if @validCharacters[i] == '&'
+                print " & " + "\\&"
+            else
+                print " & " + @validCharacters[i]
+            end
+        end
+
+        puts "\\\\"
+        puts "\\hline"
+
+        @validCharacters.each do |x|
+            xBin = encode(x)
+            if x == '&'
+                print " " + "\\&"
+            else
+                print " " + x
+            end
+            @validCharacters.each do |y|
+                yBin = encode(y)
+                product = decode(add(xBin, yBin)).chr
+                if product == '&'
+                    print " & " + "\\&"
+                else
+                    print " & " + product
+                end
+            end
+
+            puts "\\\\"
+        end
+
+        puts "\\end{tabular}"
+        
+    end
+
 end
 
 
@@ -139,24 +229,8 @@ replacements = encoder.getReplacements
 
 #encoder.isPrimitive(0b100)
 
-#print "  "
-#vc.each do |x|
-#    print x + " "
-    
-#end
+encoder.printLatexAddTable();
 
-#puts
 
-#vc.each do |x|
-#    xBin = encoder.encode(x)
-#    print x
-#    vc.each do |y|
-#        yBin = encoder.encode(y)
-#        product = encoder.add(xBin, yBin)
-#        print " " + encoder.decode(product).chr
-#    end
-
-#    puts
-#end
 
 
