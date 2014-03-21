@@ -22,19 +22,28 @@ The idea behind error correcting codes is to encode and transmit the data with a
 In section 1 we will provide the necessary abstract algebra background to understand the remainder of the paper. Section 2 will introduce coding theory and give examples of some codes. In section 3 we will go into detail about Generalized Reed-Solomon codes and will walk through an example.
 
 \section{Background}
-This section will provide all the necessary background in abstract algebra that is needed to understand Generalized Reed-Solomon codes. Specifically it will define groups, cyclic groups, rings and fields. Introduce the finite field GF(2) as well as the extension field GF($2^{m}$). Then it will describe how addition and multiplication behave in this field.
+This section will provide all the necessary background in abstract algebra that is needed to understand Generalized Reed-Solomon codes. Specifically it will define groups, cyclic groups, rings and fields. Introduce the finite field $\mathbb{F}_{2}$ as well as the extension field $\mathbb{F}_{2^{m}}$. Then it will describe how addition and multiplication behave in this field.
 
 \subsection{Groups, Rings, and Fields}
-A \textit{group} is a set, $G$, paired with a binary operation, usually denoted as $+ \text{ or } \cdot$. For now we will use $\cdot$. A group must have the following properties.
+A \textit{group} is a set, $G$, paired with a binary operation, usually denoted as $+ \text{ or } \cdot$, and referred to as addition and multiplication. For now we will use the multiplicative notation. A group must have the following properties.
 \begin{enumerate}
   \item $G$ must be closed under the operation. In otherwords, for any $a, b \in G, a \cdot b \in G$ as well.
   \item The operation must be associative. So for all $a,b,c \in G$ we have $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.
   \item There must be an identity element. This means that there exists an element $e \in G$ such that for all $a \in G, a \cdot e = e \cdot a \ a$. Traditionally, $e$ is written as $0$ if we are using $+$ to denote our operation or as $1$ if we are using $\cdot$.
   \item Identity elements must exist. So for all $a \in G$ there exists an element $a^{-1} \in G$ such that $a \cdot a^{-1} = a^{-1} \cdot a = e$, the identity element.
 \end{enumerate}
-It is important to note that the operation does not need to be commutative.
+It is important to note that the operation does not need to be commutative. If it is commutative that is called an \textit{abelian group}. An example of a group would be $\mathbb{Z}$ under addition. It is easy to see that the integers under normal addition satisfies all of the above properties and is a group. Another example would be $\mathbb{Z}^{*}$, the integers with zero removed, under multiplication. Zero needed to be removed in this case because it has no multiplicative inverse.
 
-\subsection{Addition and Multiplication in GF($2^{m}$)}
+An element $a \in G$ is called a \textit{generator} or a \textit{primitive element} of $G$ if $\{a^{n} | n \in \mathbb{Z}\} = G$. In other words if we take $a$ and multiply it by itself repeatedly, the set of products will be equal to the set $G$. Any group which has a generator is called a \textit{cyclic group}.
+
+A \textit{ring} is a set $R$, paired with two binary operations, usually denoted $+ and \cdot$ and referred to as addition and multiplication, such that the following properties hold.
+\begin{enumerate}
+  \item $R$ under addition is an abelian group.
+  \item Multiplication is associative.
+  \item The two distributive laws always hold true. In other words, $a \cdot (b + c) = (a \cdot b) + (a \cdot c)$ and $(b + c) \cdot a = (b \cdot a) + (c \cdot a)$.
+\end{enumerate}
+
+\subsection{Addition and Multiplication in $\mathbb{F}_{2^{m}}$}
 
 \section{Codes}
 A \textit{code} is a rule for converting information (usually a letter or word) into another representation. Oftentimes, this other representation is of a different form. \textit{Encoding} is the actual act of conversion. A simple code would be to map each letter of the alphabet to a number. For instance, ``A" maps to ``1", ``B" maps to ``2", etc. In this example, the letters are our \textit{source alphabet}, and the numbers are our \textit{target alphabet}. To encode the word ``ALGEBRA" we would simply replace all the letters with the appropriate numbers. In this case, ``112752171" is the result. The act of \textit{decoding} reverses the code and returns the word to its original state.
@@ -49,7 +58,7 @@ An example of an actual code, used in computer hard drives, is a \textit{cyclic 
 CRCs are commonly used because they are easy to implement in binary hardware, easy to analyze, and are quite good at detecting burst errors. Usually, an $n$-bit CRC used on an arbitrary length message will detect any single burst error less than or equal to $n$ bits and will detect a fraction $1 - 2^{-n}$ of all longer burst errors. 
 
 The specification of a CRC code requires a \textit{generator polynomial}. This polynomial is the divisor in polynomial long division, the dividend is the message, the quotient is thrown away, and the remainder becomes the result. It is important to note that the coefficients of the polynomial are computed using the carry-less arithmetic of a 
-finite field. Most CRCs use the finite field GF(2) in practice as this field only has two elements, 0 and 1, which meshes nicely with the architecture of computers.
+finite field. Most CRCs use the finite field $\mathbb{F}_{2}$ in practice as this field only has two elements, 0 and 1, which meshes nicely with the architecture of computers.
 
 A CRC is called an $n$-bit CRC when its check value has $n$ bits. Any $n$ has multiple CRCs, each with a different polynomial. Any such polynomial has highest degree $n$, which means that it has $n + 1$ terms, and that its encoding requires $n + 1$ bits. A CRC and associated polynomial are given a name of the form CRC-$n$-XXX. The simplest CRC is CRC-1 and it uses the generator polynomial $x + 1$. This is also called a parity bit, which is the simplest form of error detection.
 
@@ -179,7 +188,7 @@ where $\textbf{u} = (u_{1},...,u_{n}) \text{ with } u_{i}^{-1} = v_{i}\prod\limi
 To verify that $\textbf{f}$ is a codeword in $C = \text{GRS}_{n,k}(\boldsymbol\alpha, \textbf{v})$ it is not necessary to compare it to every $\textbf{g} \text{ of } C^{\perp} = \text{GRS}_{n,n-k}(\boldsymbol\alpha, \textbf{v})$. Instead, we can use a basis of $C^{\perp}$, which is also a check matrix for $C$. Using a check matrix to define a linear code has its benefits. One such benefit is that it will allow us to use \textit{syndrome decoding}, which will be discussed in more detail in a later section.
 
 \subsection{Encoding GRS Codes}
-The field we are using to encode is GF($2^{6}$). This is the field of all 6 bit binary strings. Addition and multiplication work as described above in this field. This gives us 64 different symbols we can use in our source alphabet. For our example we chose to map 64 ASCII characters to the elements in GF($2^{6}$). Specifically, we mapped characters 32-95 inclusive. Because this map exists, we do not have to think directly about the binary strings underneath. We can write the elements of GF($2^{6}$) as those characters as well as perform the field operations on those characters. A Ruby script was used to generate an addition and multiplication table for these operations. The tables as well as the script can be seen in appendix A. 
+The field we are using to encode is $\mathbb{F}_{2^{6}}$. This is the field of all 6 bit binary strings. Addition and multiplication work as described above in this field. This gives us 64 different symbols we can use in our source alphabet. For our example we chose to map 64 ASCII characters to the elements in $\mathbb{F}_{2^{6}}$. Specifically, we mapped characters 32-95 inclusive. Because this map exists, we do not have to think directly about the binary strings underneath. We can write the elements of $\mathbb{F}_{2^{6}}$ as those characters as well as perform the field operations on those characters. A Ruby script was used to generate an addition and multiplication table for these operations. The tables as well as the script can be seen in appendix A. 
 
 A GRS code is composed of two parts. The first part is the actual message that we are sending. The message is $n$ symbols long and can be written as an $n - 1$ degree polynomial. The second part is the parity symbols. There are $r = n - k$ parity symbols appended to the end of the message to be used to ensure correctness after transmission. 
 
