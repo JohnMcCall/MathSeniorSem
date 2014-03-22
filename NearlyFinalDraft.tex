@@ -137,7 +137,7 @@ The generator matrix $H$ for the dual code $C^{\perp}$ of linear code $C$ is cal
 \begin{center}
 $C = \{\textbf{x} \mid H\textbf{x}^{\mathsf{T}} = \textbf{0}\}$.
 \end{center}
-Often a code is defined using a check matrix. [Insert example here?]
+Often a code is defined using a check matrix. %[Insert example here?]
 
 \section{Generalized Reed-Solomon Codes}
 Reed-Solomon codes were first introduced in 1960 by I.S. Reed and G. Solomon~\cite{RS:1960}. These codes are somewhat rare in that they have both useful practical applications and an interesting mathematical foundation. Today, Reed-Solomon codes are used in many applications such as CD players and deep-space communications.
@@ -146,7 +146,7 @@ Reed-Solomon codes are a linear code. An $n$ length and $k$ dimension RS code is
 
 J. Hall presents, in~\cite{Hall:2012}, generalized Reed-Solomon Codes. It is these generalized codes that we will be focusing on for the remainder of this paper. Below we will discuss the basic structure of these codes. After that we will go into detail about how to encode and decode a generalized Reed-Solomon Code.
 
-[There will also be an example to go along with this section in the future, unfortunately it is incomplete in this version] 
+%[There will also be an example to go along with this section in the future, unfortunately it is incomplete in this version] 
 
 \subsection{The Basics}
 Let $F$ be a field. Choose nonzero elements $v_{1},..., v_{n} \in F$ and distinct elements $\alpha_{1},...,\alpha_{n} \in F$. Set $\textbf{v} = (v_{1},..., v_{n})$ and $\boldsymbol\alpha = (\alpha_{1},...,\alpha_{n})$ For $0 \le k \le n$ \textit{generalized Reed-Solomon codes} are defined as:
@@ -175,7 +175,7 @@ and
 \begin{center}
 $L_{i}(x) = L(x)/(x - \alpha_{i}) = \prod\limits_{j \neq i} (x - \alpha_{j})$.
 \end{center}
-Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. Since the $i^{\text{th}}$ coordinate of vector $\textbf{f}$ is $v_{i}f(\alpha_{i})$ we can use Lagrange interpolation [insert reference to Lagrange interpolation here] to calculate
+Both $L(x)$ and $L_{i}(x)$ are \textit{monic} polynomials of degrees $n$ and $n - 1$, respectively. A polynomial is monic if the leading coefficient is equal to 1. Since the $i^{\text{th}}$ coordinate of vector $\textbf{f}$ is $v_{i}f(\alpha_{i})$ we can use Lagrange interpolation to calculate
 \begin{center}
 $f(x) = \sum\limits_{i=1}^{n} \dfrac{L_{i}(x)}{L_{i}(\alpha_{i})}f(\alpha_{i})$.
 \end{center}
