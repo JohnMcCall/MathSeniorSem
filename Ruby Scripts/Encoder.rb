@@ -66,13 +66,23 @@ class Encoder
         ec1 ^ ec2
     end
 
-    def add(char1, char2)
+    def binaryAdd(char1, char2)
         encodedChar1 = encode(char1)
         encodedChar2 = encode(char2)
         result = addEncoded(encodedChar1, encodedChar2)
         decode(result).chr
     end
-
+    
+    def add(chars)
+        result = chars[0]
+        
+        for i in 1...chars.length
+            result = binaryAdd(result, chars[i])
+        end
+        
+        result
+    end
+    
     def multiplyEncoded(ec1, ec2)
         poly1 = binaryToPoly(ec1)
         poly2 = binaryToPoly(ec2)
@@ -82,14 +92,34 @@ class Encoder
         polyToBinary(product)
     end
 
-    def multiply(char1, char2)
+    def binaryMultiply(char1, char2)
         encodedChar1 = encode(char1)
         encodedChar2 = encode(char2)
         result = multiplyEncoded(encodedChar1, encodedChar2)
         decode(result).chr
     end
+    
+    def multiply(chars)
+        result = chars[0]
+        
+        for i in 1...chars.length
+            result = binaryMultiply(result, chars[i])
+        end
+        
+        result
+    end
+    
+    def exp(char, power)
+        toReturn = char
+        
+        for i in 2..power
+            toReturn = multiply(toReturn, char)
+        end
+        
+        toReturn
+    end
 
-    # multiplies 2 polynomials with coefs in Z2
+    # multiplies 2 polynomials with coefs in Z(2^m)
     def multiplyPolys(poly1, poly2)
         newPoly = poly1.*(poly2)
 
@@ -127,15 +157,15 @@ class Encoder
         Polynomial[coefs]
     end
 
-    # This method is given an encoded character
-    def isPrimitive(ec)
-        puts ec
+    # This method is given a character
+    def isPrimitive(char)
+        puts char
         
         count = 1
-        currentEC = multiplyEncoded(ec, ec)
-        while currentEC != ec do
-            puts currentEC
-            currentEC = multiplyEncoded(currentEC, ec)
+        current = multiplyEncoded(char, char)
+        while current != char do
+            puts current
+            current = multiplyEncoded(current, char)
             count += 1
         end
 
@@ -238,13 +268,46 @@ end
 
 encoder = Encoder.new
 
-vc = encoder.getValidCharacters
+@vc = encoder.getValidCharacters
 replacements = encoder.getReplacements
 
 #encoder.isPrimitive(0b100)
 
-#encoder.printLatexAddTable();
+#encoder.printLatexAddTable()
 
+#puts encoder.add(['$', '0', '#', ',', 'P', '%'])
+#puts encoder.add(['#', ',', '4', '\\', 'U'])
+#puts encoder.add(['%', '4', '/', '\\', 'U', '1', '<', '5'])
+#puts encoder.add(['\\', 'U', '<', 'D', '6'])
+#puts encoder.add(['S', ')', 'D', '6', ';', 'O'])
 
+def generateCoefs(string)
+    toReturn = []
+    
+    string.split(//).each do |char|
+        index = @vc.rindex(char)
+        toReturn.push(index)
+    end
+    
+    toReturn
+end
+
+mCoefs = generateCoefs("THIS IS MAJOR TOM")
+gCoefs = generateCoefs("Z\\G/2N!")
+
+m = Polynomial.new(mCoefs)
+g = Polynomial.new(gCoefs)
+
+#result = (Polynomial.new([0,0,0,0,0,0,1]) * m) % g
+result = m * g
+
+temp = result.coefs.dup
+temp = temp.map! {|x| x % 63}
+
+temp.each do |char|
+    puts @vc[char]
+end
+
+#p m % g
 
 
