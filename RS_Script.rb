@@ -62,17 +62,31 @@ class Encoder
     end
 
     # Addition of two encoded characters
-    def add(ec1, ec2)
+    def addEncoded(ec1, ec2)
         ec1 ^ ec2
     end
 
-    def multiply(ec1, ec2)
+    def add(char1, char2)
+        encodedChar1 = encode(char1)
+        encodedChar2 = encode(char2)
+        result = addEncoded(encodedChar1, encodedChar2)
+        decode(result).chr
+    end
+
+    def multiplyEncoded(ec1, ec2)
         poly1 = binaryToPoly(ec1)
         poly2 = binaryToPoly(ec2)
 
         product = multiplyPolys(poly1, poly2)
 
         polyToBinary(product)
+    end
+
+    def multiply(char1, char2)
+        encodedChar1 = encode(char1)
+        encodedChar2 = encode(char2)
+        result = multiplyEncoded(encodedChar1, encodedChar2)
+        decode(result).chr
     end
 
     # multiplies 2 polynomials with coefs in Z2
@@ -118,10 +132,10 @@ class Encoder
         puts ec
         
         count = 1
-        currentEC = multiply(ec, ec)
+        currentEC = multiplyEncoded(ec, ec)
         while currentEC != ec do
             puts currentEC
-            currentEC = multiply(currentEC, ec)
+            currentEC = multiplyEncoded(currentEC, ec)
             count += 1
         end
 
@@ -143,7 +157,7 @@ class Encoder
             print x
             @validCharacters.each do |y|
                 yBin = encode(y)
-                product = multiply(xBin, yBin)
+                product = multiplyEncoded(xBin, yBin)
                 print " " + decode(product).chr
             end
 
@@ -165,7 +179,7 @@ class Encoder
             print x
             @validCharacters.each do |y|
                 yBin = encode(y)
-                product = add(xBin, yBin)
+                product = addEncoded(xBin, yBin)
                 print " " + decode(product).chr
             end
 
@@ -204,7 +218,7 @@ class Encoder
             end
             @validCharacters.each do |y|
                 yBin = encode(y)
-                product = decode(add(xBin, yBin)).chr
+                product = decode(addEncoded(xBin, yBin)).chr
                 if product == '&'
                     print " & " + "\\&"
                 else
@@ -229,7 +243,7 @@ replacements = encoder.getReplacements
 
 #encoder.isPrimitive(0b100)
 
-encoder.printLatexAddTable();
+#encoder.printLatexAddTable();
 
 
 
