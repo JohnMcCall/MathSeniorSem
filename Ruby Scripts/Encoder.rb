@@ -123,9 +123,9 @@ class Encoder
     def multiplyPolys(poly1, poly2)
         newPoly = poly1.*(poly2)
 
-        newPoly = mod2(newPoly)
+        newPoly = modX(newPoly, 2)
         newPoly = reduce(newPoly)
-        newPoly = mod2(newPoly)
+        newPoly = modX(newPoly, 2)
         
         newPoly
     end
@@ -150,10 +150,10 @@ class Encoder
     end
 
     # despite what this terrible name implies, all this function does
-    # is set all even coefficients to 0.
-    def mod2(poly)
+    # is reduce the coefficients mod x
+    def modX(poly, mod)
         coefs = poly.coefs.dup
-        coefs = coefs.map! {|x| x % 2}
+        coefs = coefs.map! {|x| x % mod}
         Polynomial[coefs]
     end
 
@@ -292,22 +292,38 @@ def generateCoefs(string)
     toReturn
 end
 
-mCoefs = generateCoefs("THIS IS MAJOR TOM")
-gCoefs = generateCoefs("Z\\G/2N!")
+#mCoefs = generateCoefs("THIS IS MAJOR TOM")
+#gCoefs = generateCoefs("Z\\G/2N!")
 
-m = Polynomial.new(mCoefs)
-g = Polynomial.new(gCoefs)
+#m = Polynomial.new(mCoefs)
+#g = Polynomial.new(gCoefs)
 
 #result = (Polynomial.new([0,0,0,0,0,0,1]) * m) % g
-result = m * g
+#result = m * g
 
-temp = result.coefs.dup
-temp = temp.map! {|x| x % 63}
+#temp = result.coefs.dup
+#temp = temp.map! {|x| x % 63}
 
-temp.each do |char|
-    puts @vc[char]
-end
+#temp.each do |char|
+#    puts @vc[char]
+#end
 
 #p m % g
+
+roots = ('A'..'Q').to_a
+
+l = Polynomial.new([1])
+
+roots.each do |char|
+    l = (Polynomial.new([-@vc.rindex(char), 1]) * l)
+end
+
+l = encoder.modX(l, 63)
+
+roots.each do |char|
+    result = (l / Polynomial.new([-@vc.rindex(char), 1])).substitute(@vc.rindex(char))
+    puts @vc[result % 63]
+end
+
 
 
