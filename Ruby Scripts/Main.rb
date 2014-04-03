@@ -4,13 +4,14 @@ require "rubygems"
 require "polynomial"
 require "./Encoder"
 require "./CoefficientArithmetic.rb"
+require "./MyPolynomial.rb"
 
 
 encoder = Encoder.new
 ca = CoefficientArithmetic.new
 
 @vc = encoder.getValidCharacters
-replacements = encoder.getReplacements
+replacements = ca.getReplacements
 
 #encoder.isPrimitive(0b100)
 
@@ -67,4 +68,13 @@ end
 #    result = (l / Polynomial.new([-@vc.rindex(char), 1])).substitute(@vc.rindex(char))
 #    puts @vc[result % 63]
 #end
+
+
+p1 = MyPolynomial['!', '!', '$']
+p2 = MyPolynomial['#', ' ', '!']
+
+puts "P1: " + p1.to_s
+puts "P2: " + p2.to_s
+puts "P1 * P2: " + (p1 * p2).to_s
+
 

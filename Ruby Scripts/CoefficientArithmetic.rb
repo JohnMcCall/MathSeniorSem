@@ -43,6 +43,10 @@ class CoefficientArithmetic
         @polys
     end
     
+    def getValidCharacters()
+        @validCharacters
+    end
+    
     # It is not neccessary to convert the binary strings to a polynomial to add them.
     def addEncoded(char1, char2)
         char1 ^ char2
