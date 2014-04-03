@@ -14,6 +14,10 @@ class CoefficientArithmetic
     
     def initialize()
         super()
+        
+        @encoder = Encoder.new()
+        
+        @validCharacters = @encoder.getValidCharacters()
 
         # These are the polynomials which get replaced since they are higher
         # Than degree 5.
@@ -25,9 +29,10 @@ class CoefficientArithmetic
         @replacements = [Polynomial.new(1, 1), Polynomial.new(0, 1, 1), 
                          Polynomial.new(0, 0, 1, 1), Polynomial.new(0, 0, 0, 1, 1), 
                          Polynomial.new(0, 0, 0, 0, 1, 1)]
-
-        @encoder = Encoder.new
-
+                         
+        # This is an inverse lookup table. It maps an element to its multiplicative inverse.
+        @inverses = generateInverses()
+    
     end
 
     def getReplacements()
@@ -36,8 +41,8 @@ class CoefficientArithmetic
 
     def getPolys()
         @polys
-    end 
-
+    end
+    
     # It is not neccessary to convert the binary strings to a polynomial to add them.
     def addEncoded(char1, char2)
         char1 ^ char2
@@ -67,6 +72,14 @@ class CoefficientArithmetic
         binaryArray = binaryArray.map! {|x| x.to_i}
         binaryArray = binaryArray.reverse
         Polynomial[binaryArray]
+    end
+    
+    def polyToBinary(poly)
+        coefs = poly.coefs
+        coefs = coefs.reverse
+        coefs = coefs.map! {|x| x.to_s}
+        binary = coefs.join
+        binary.to_i(2)
     end
     
     # To multiply we do need to convert the binary strings to polynomials
@@ -127,9 +140,19 @@ class CoefficientArithmetic
         newPoly = poly.-(@polys[degree - 6])
         newPoly.+(replacement)
     end
+    
+    # This method raises a character to a given power
+    def exp(char, power)
+        toReturn = char
+        
+        for i in 2..power
+            toReturn = multiply(toReturn, char)
+        end
+        
+        toReturn
+    end
 
-    # despite what this terrible name implies, all this function does
-    # is reduce the coefficients mod x
+    # This function does reduces the coefficients mod x
     def modX(poly, mod)
         coefs = poly.coefs.dup
         coefs = coefs.map! {|x| x % mod}
@@ -151,6 +174,33 @@ class CoefficientArithmetic
         puts "The count was: " + count.to_s
 
     end
+    
+    # This method creates a Hashmap of multiplicative inverses
+    def generateInverses()
+        toReturn = Hash.new()
+        
+        @validCharacters.each do |x|
+            @validCharacters.each do |y|
+                if (multiply([x,y]) == '!')
+                    toReturn[x] = y
+                    break
+                end
+            end
+        end
+        
+        toReturn
+    end
+    
+    # This method finds the inverse by looking it up in the table
+    def findInverse(char)
+        @inverses[char]
+    end
+    
+    # This method divides two elements (by multiplying by the inverse of the divisor)
+    def binaryDivide(dividend, divisor)
+        inverse = findInverse(divisor)
+        multiply([dividend, inverse])
+    end 
 
     # Prints a Multiplication Table
     def printMultTable()
@@ -163,12 +213,12 @@ class CoefficientArithmetic
         puts
 
         @validCharacters.each do |x|
-            xBin = encode(x)
+            xBin = @encoder.encode(x)
             print x
             @validCharacters.each do |y|
-                yBin = encode(y)
+                yBin = @encoder.encode(y)
                 product = multiplyEncoded(xBin, yBin)
-                print " " + decode(product).chr
+                print " " + @encoder.decode(product).chr
             end
 
             puts
@@ -186,12 +236,12 @@ class CoefficientArithmetic
         puts
 
         @validCharacters.each do |x|
-            xBin = encode(x)
+            xBin = @encoder.encode(x)
             print x
             @validCharacters.each do |y|
-                yBin = encode(y)
+                yBin = @encoder.encode(y)
                 product = addEncoded(xBin, yBin)
-                print " " + decode(product).chr
+                print " " + @encoder.decode(product).chr
             end
 
             puts
