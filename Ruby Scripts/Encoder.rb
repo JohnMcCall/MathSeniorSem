@@ -27,7 +27,6 @@ class Encoder
 
     def decode(int)
         int + 0x20
-    endend
     end
 
 end
