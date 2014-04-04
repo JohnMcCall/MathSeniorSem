@@ -150,7 +150,7 @@ class CoefficientArithmetic
         toReturn = char
         
         for i in 2..power
-            toReturn = multiply(toReturn, char)
+            toReturn = multiply([toReturn, char])
         end
         
         toReturn
@@ -163,19 +163,19 @@ class CoefficientArithmetic
         Polynomial[coefs]
     end
 
-    # This method is given a character
+    # This method is given a character and returns true
+    # if that character is a primitive element
     def isPrimitive(char)
-        puts char
+        encodedChar = @encoder.encode(char)
         
         count = 1
-        current = multiplyEncoded(char, char)
-        while current != char do
-            puts current
-            current = multiplyEncoded(current, char)
+        current = multiplyEncoded(encodedChar, encodedChar)
+        while current != encodedChar do
+            current = multiplyEncoded(current, encodedChar)
             count += 1
         end
 
-        puts "The count was: " + count.to_s
+        count == 63
 
     end
     

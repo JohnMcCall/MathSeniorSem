@@ -40,9 +40,11 @@ class MyPolynomial < Polynomial
     
     # Addition
     def +(other)
-        case other
-            when (@ca.getValidCharacters.include? other)
-                ca.add([self, MyPolynomial.new(other)])
+        constant = @ca.getValidCharacters.include? other
+        
+        case constant
+            when true            
+                self + MyPolynomial.new(other)
             else
                 small, big = [self, other].sort
                 a = big.coefs.dup
@@ -55,8 +57,10 @@ class MyPolynomial < Polynomial
     
     # Multiplication
     def *(other)
-        case other
-            when (@ca.getValidCharacters.include? other)
+        scalar = @ca.getValidCharacters.include? other
+    
+        case scalar
+            when true
                 result_coefs = @coefs.map {|a| @ca.multiply([a, other])}
             else
                 result_coefs = [' '] * (self.degree + other.degree + 2)
@@ -67,31 +71,29 @@ class MyPolynomial < Polynomial
                     end
                 end
         end
-        p result_coefs
-        puts
         MyPolynomial.new(result_coefs)
     end
     
     # Division. Returns a list of the quotient and the remainder
     def divmod(divisor)
-        case divisor
-            when (@ca.getValidCharacters.include? other)
-              new_coefs = @coefs.map do |a|
-                  quotient = @ca.binaryDivide(a, divisor)
-              end
-              q, r = MyPolynomial[new_coefs], MyPolynomial[' ']
-            when MyPolynomial
-              a = self; b = divisor; q = ' '; r = self
-              (a.degree - b.degree + 1).times do
-                dd = r.degree - b.degree
-                qqa = @ca.binaryDivide(r.coefs[-1], b.coefs[-1])
-                qq = Polynomial[dd => qqa]
-                q = @ca.add([q, qq])
-                r = @ca.add([r, @ca.multiply([qq, divisor])])
-                break if r.zero?
-              end
-            else
-              raise ArgumentError, 'divisor should be a valid character or polynomial'
+    
+        if (@ca.getValidCharacters.include? divisor)
+          new_coefs = @coefs.map do |a|
+              quotient = @ca.binaryDivide(a, divisor)
+          end
+          q, r = MyPolynomial[new_coefs], MyPolynomial[' ']
+        elsif divisor.is_a? MyPolynomial
+          a = self; b = divisor; q = ' '; r = self
+          (a.degree - b.degree + 1).times do
+            dd = r.degree - b.degree
+            qqa = @ca.binaryDivide(r.coefs[-1], b.coefs[-1])
+            qq = MyPolynomial[dd => qqa]
+            q = qq.+(q)
+            r = r + (qq * divisor)
+            break if r.zero?
+          end
+        else
+          raise ArgumentError, 'divisor should be a valid character or polynomial'
         end
         [q, r]
     end
@@ -138,7 +140,6 @@ class MyPolynomial < Polynomial
       next if (a == ' ') && degree > 0 && !params[:verbose]
       result += '+' unless result.empty?
       coef_str = a.to_s
-      coef_str = '(' + coef_str + ')' if coef_str[/[+\/]/]
       result += coef_str unless a == 1 && n > 0
       result += "#{mult}" if a != 1 && n > 0
       result += "#{var}" if n >= 1
