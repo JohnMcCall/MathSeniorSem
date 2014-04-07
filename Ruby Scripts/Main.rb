@@ -19,9 +19,10 @@ replacements = ca.getReplacements
 rNeg1 = MyPolynomial[6=>'!']
 r0 = MyPolynomial[']', ']', ' ', '7', ' ', '1']
 r1 = MyPolynomial[' ', '+', '+', ' ', 'S']
-puts r0.to_s
+r2 = MyPolynomial[']', ']', 'X', 'O']
 puts r1.to_s
-q, r = r0.divmod(r1)
+puts r2.to_s
+q, r = r1.divmod(r2)
 puts q
 puts r
 puts ((q * r1) + r).to_s
