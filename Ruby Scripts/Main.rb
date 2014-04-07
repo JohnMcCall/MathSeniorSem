@@ -15,7 +15,7 @@ ca = CoefficientArithmetic.new
 vc = encoder.getValidCharacters
 replacements = ca.getReplacements
 
-
+=begin
 rNeg1 = MyPolynomial[6=>'!']
 r0 = MyPolynomial[']', ']', ' ', '7', ' ', '1']
 r1 = MyPolynomial[' ', '+', '+', ' ', 'S']
@@ -25,9 +25,12 @@ puts r2.to_s
 q, r = r1.divmod(r2)
 puts q
 puts r
-puts ((q * r1) + r).to_s
+puts ((q * r2) + r).to_s
 
-=begin
+puts (MyPolynomial[' ', 'V'] + (MyPolynomial['Z', 'J'] * MyPolynomial['!', '^'])).to_s
+=end
+
+
 # The first step it to find a primitive element. 
 # Using the isPrimitive method, we can test many different 
 # elements quickly. Here, I found that $ is a primitive element.
@@ -93,7 +96,7 @@ a.each do |elt|
     result = (l / MyPolynomial[elt, '!']).substitute(elt)
     u.push(ca.findInverse(result))
 end
-
+=end
 
 u = [":", "X", "D", "*", "I", "^", "*", "'", "N", "(", "B", "3", "?", "X", "\\", "J", "P"]
 
@@ -112,29 +115,24 @@ products = []
     products.push(MyPolynomial[ca.multiply([u[i], p[i]])])
 end
 
-## Then multiply the (1 - ai * z) for each element in the product array, doing the
-## mod z^6 operation. Then add to sp
+denom = MyPolynomial['!']
+a.each do |elt|
+    denom = denom * MyPolynomial['!', elt]
+end
 
-=begin  -- Again this took a long time so I ran it once and hardcoded the result into the program
+#  -- Again this took a long time so I ran it once and hardcoded the result into the program
 sp = MyPolynomial[' ']
-(0...products.length).each do |i|
-    product = MyPolynomial['!']
-    (0...u.length).each do |j|
-        if (j != i)
-            product = product * MyPolynomial['!', a[j]]
-        end
-    end
-    
-    # mod by z^6 by taking the first 6 coefs and creating a new poly from them    
-    product = MyPolynomial.new(product.coefs.take(6))
-    product = (products[i] * product)
-    sp = sp + product
+(0...u.length).each do |i|
+    mult = denom / MyPolynomial['!', a[i]]
+    # mod by z^6 by taking the first 6 coefs and creating a new poly from them
+    product = products[i] * mult    
+    mod6 = MyPolynomial.new(product.coefs.take(6))
+    sp = sp + mod6
 end
 
 
-sp = MyPolynomial[']', ']', ' ', '7', ' ', '1']
+#sp = MyPolynomial[']', ']', ' ', '7', ' ', '1']
 puts sp.to_s
 puts
 
 
-=end
