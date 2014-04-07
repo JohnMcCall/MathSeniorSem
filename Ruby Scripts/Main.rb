@@ -16,6 +16,17 @@ vc = encoder.getValidCharacters
 replacements = ca.getReplacements
 
 
+rNeg1 = MyPolynomial[6=>'!']
+r0 = MyPolynomial[']', ']', ' ', '7', ' ', '1']
+r1 = MyPolynomial[' ', '+', '+', ' ', 'S']
+puts r0.to_s
+puts r1.to_s
+q, r = r0.divmod(r1)
+puts q
+puts r
+puts ((q * r1) + r).to_s
+
+=begin
 # The first step it to find a primitive element. 
 # Using the isPrimitive method, we can test many different 
 # elements quickly. Here, I found that $ is a primitive element.
@@ -67,7 +78,9 @@ puts
 # We want to find a vector u for the dual code of C = GRS(a, u).
 # Note: This calculation took a really long time. So I hard coded in the
 # value for u so I don't have to sit through the calculation everytime.
-a = ('A'..'Q')
+a = ('A'..'Q').to_a
+puts "a = " + a.to_s
+puts
 =begin
 l = '!'
 a.each do |elt|
@@ -79,13 +92,48 @@ a.each do |elt|
     result = (l / MyPolynomial[elt, '!']).substitute(elt)
     u.push(ca.findInverse(result))
 end
-=end
+
 
 u = [":", "X", "D", "*", "I", "^", "*", "'", "N", "(", "B", "3", "?", "X", "\\", "J", "P"]
 
 puts "u = " + u.to_s
 puts
 
+# Lets say that the message we recieved is "THIS IS MAYOR TED".
+# we calculate the Syndrome Polynomial for the received message vector, p.
+p = "THIS IS MAYOR TED".split(//)
+puts "p = " + p.to_s
+puts 
+
+## First generate the ui * pi and add them to an array
+products = []
+(0...u.length).each do |i|
+    products.push(MyPolynomial[ca.multiply([u[i], p[i]])])
+end
+
+## Then multiply the (1 - ai * z) for each element in the product array, doing the
+## mod z^6 operation. Then add to sp
+
+=begin  -- Again this took a long time so I ran it once and hardcoded the result into the program
+sp = MyPolynomial[' ']
+(0...products.length).each do |i|
+    product = MyPolynomial['!']
+    (0...u.length).each do |j|
+        if (j != i)
+            product = product * MyPolynomial['!', a[j]]
+        end
+    end
+    
+    # mod by z^6 by taking the first 6 coefs and creating a new poly from them    
+    product = MyPolynomial.new(product.coefs.take(6))
+    product = (products[i] * product)
+    sp = sp + product
+end
 
 
+sp = MyPolynomial[']', ']', ' ', '7', ' ', '1']
+puts sp.to_s
+puts
 
+
+=end
