@@ -15,6 +15,23 @@ ca = CoefficientArithmetic.new
 vc = encoder.getValidCharacters
 replacements = ca.getReplacements
 
+puts ca.add(['\\', 'L', 'Q', 'M', 'N', '<', 'W', 'V', '?', '0', 'S', 'O', 'N', '(', '7', '$', '!', 'W', 'A', '2', '-', ']', 'L'])
+
+=begin
+map = Hash.new()
+element = 'A'
+acc = '!'
+poly = MyPolynomial['!']
+(1..5).each do |i|
+  acc = ca.multiply([acc, element])
+  poly = poly + MyPolynomial[i => acc]
+end 
+
+map[element] = (poly * MyPolynomial['!', 'A'])
+
+puts map["A"].to_s
+=end
+
 =begin
 rNeg1 = MyPolynomial[6=>'!']
 r0 = MyPolynomial[']', ']', ' ', '7', ' ', '1']

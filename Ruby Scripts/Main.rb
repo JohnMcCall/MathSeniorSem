@@ -49,7 +49,7 @@ def euclid(r0, r1)
 end
 
 
-sigma = MyPolynomial['!', ' ', '^', '4']
+sigma = MyPolynomial['!', 'G']
 vc.each do |elt|
     if (sigma.substitute(elt) == ' ')
         puts elt
@@ -65,7 +65,7 @@ puts "f(x) = " + messagePoly.to_s
 puts
 
 # Now that we have f(x), we can use it to calculate a codeword, c.
-# For this example C = GRS(a,v), where v = (1,1...1).
+# For this example C = GRS(a,v), where v = ('!','!'...'!').
 a = ('A'..'W').to_a
 puts "a = " + a.to_s
 puts
@@ -81,15 +81,21 @@ puts
 # Note: This calculation took a really long time. So I hard coded in the
 # value for l and u so I don't have to sit through the calculation everytime.
 l = MyPolynomial.new([".", "/", "S", "'", "9", "X", "<", "I", "X", "Y", "^", "5", "@", "!", "_", "J", ";", "(", ")", ".", "H", "P", "@", "!"])
+
+#puts "Product: " + ca.multiply(a)
+
 =begin
 l = '!'
 a.each do |elt|
     l = MyPolynomial[elt, '!'] * l
+    puts l.to_s
 end
 
-puts "l(x) coefs: " + l.coefs.to_a.to_s
-puts
+puts l.divmod(MyPolynomial['W', '!']).to_s
+=end
 
+#puts "l(x) coefs: " + l.coefs.to_a.to_s
+=begin
 u = []
 a.each do |elt|
     result = (l / MyPolynomial[elt, '!']).substitute(elt)
@@ -99,6 +105,7 @@ end
 
 u = ["2", "D", "V", "+", "9", "O", "]", "G", "*", "^", "3", "5", "X", ",", "A", "A", ">", "<", "C", "8", "G", "E", ":"]
 
+puts "Assuming these are correct:"
 puts "u = " + u.to_s
 puts
 
@@ -111,6 +118,19 @@ p = ["T", "(", "U", "8", "P", "K", "Z", "N", "W", "P", "4", "K", "'", "_", "N", 
 puts "p = " + p.to_s
 puts
 
+=begin
+inverses = Hash.new()
+
+a.each do |elt|
+  acc = '!'
+  poly = MyPolynomial['!']
+  (1..5).each do |i|
+    acc = ca.multiply([acc, elt])
+    poly = poly + MyPolynomial[i => acc]
+  end 
+
+  inverses[elt] = poly
+end
 
 ## First generate the ui * pi and add them to an array
 products = []
@@ -118,22 +138,13 @@ products = []
     products.push(MyPolynomial[ca.multiply([u[i], p[i]])])
 end
 
-denom = MyPolynomial['!']
-a.each do |elt|
-    denom = denom * MyPolynomial['!', elt]
-end
-
-#  -- Again this took a long time so I ran it once and hardcoded the result into the program
 sp = MyPolynomial[' ']
-(0...u.length).each do |i|
-    mult = denom / MyPolynomial['!', a[i]]
-    # mod by z^6 by taking the first 6 coefs and creating a new poly from them
-    product = products[i] * mult    
-    mod6 = MyPolynomial.new(product.coefs.take(6))
-    sp = sp + mod6
+(0...a.length).each do |i|
+  product = inverses[a[i]] * products[i]
+  sp = sp + product
 end
-
-#sp = MyPolynomial['?', "'", '\\', 'I', '4', 'Z']
+=end
+sp = MyPolynomial['L', "[", '@', '5', '6', '\\']
 puts "Sp = " + sp.to_s
 puts
 
