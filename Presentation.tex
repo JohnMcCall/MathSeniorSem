@@ -1,0 +1,274 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{CambridgeUS}
+  \setbeamercovered{transparent}
+}
+
+\usepackage{amsmath}
+\usepackage{verbatim}
+
+% The text in square brackets is the short version of your title and will be used in the
+% header/footer depending on your theme.
+\title[Generalized Reed-Solomon Codes]{Generalized Reed-Solomon Codes}
+
+% Sub-titles are optional - uncomment and edit the next line if you want one.
+% \subtitle{Why does sub-tree crossover work?}
+
+% The text in square brackets is the short version of your name(s) and will be used in the
+% header/footer depending on your theme.
+\author[McCall]{John McCall}
+\institute[U of Minn, Morris]
+{
+  Division of Science and Mathematics \\
+  University of Minnesota, Morris \\
+  Morris, Minnesota, USA
+}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[currentsection, hideothersubsections]
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\section*{Overview}
+
+\begin{frame}
+	\frametitle{Overview}
+	\begin{itemize}
+		\item Data transmission has become vital in today's society.
+		
+		\item Transmission methods are not perfect.
+		
+		\item Error correcting codes help to alleviate the burden of transmission.
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Defining our Field}
+
+\begin{frame}
+	\frametitle{Introducing $\mathbb{F}_{64}$}
+	The finite field of 64 elements.
+	
+	[Insert picture of ASCII table showing the elements]
+\end{frame}
+
+\begin{frame}
+	\frametitle{Representation of our Elements}
+	\begin{itemize}
+		\item Each element is encoded as a 6-bit binary string.
+		\item We can represent that string as a polynomial in $\mathbb{F}_{2}[x]$.
+	\end{itemize}
+	
+	For example:
+	\begin{itemize}
+		 \item \# $\rightarrow$ 000011 $\rightarrow x + 1$ 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Addition in $\mathbb{F}_{64}$}
+	\begin{itemize}
+		\item Regular polynomial addition, but the coefficients are added modulo 2.
+		\item $(x^{4} + x^{2} + x + 1) + (x^{3} + x + 1) = x^{4} + x^{3} + x^{2}$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Multiplication in $\mathbb{F}_{64}$}
+	\begin{itemize}
+		\item Similar to regular multiplication, except the result cannot be larger than degree 5.
+		\item We have to use an irreducible polynomial to mod out terms that are of too high a degree.
+		\item The polynomial: $x^{6} + x + 1 \rightarrow x^{6} = x + 1$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Multiplication Example}
+	\begin{itemize}
+		\item $(x^{5} + x^{2} + x + 1)(x^{4} + x)$
+		\item $= x^{9} + x^{6} + x^{6} + x^{5} + x^{4} + x^{3} + x^{2} + x$
+		\item $= x^{9} + x^{5} + x^{4} + x^{3} + x^{2} + x$
+		\item $= (x^{6})(x^{3}) + x^{5} + x^{4} + x^{3} + x^{2} + x$
+		\item $= (x + 1)(x^{3}) + x^{5} + x^{4} + x^{3} + x^{2} + x$
+		\item $= x^{4} + x^{3} + x^{5} + x^{4} + x^{3} + x^{2} + x$
+		\item $= x^{5} + x^{2} + x$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Multiplication Table}
+	[Insert Multiplication Table Here]
+\end{frame}
+
+\section{Codes}
+
+\begin{frame}
+	\frametitle{Introduction to Codes}
+	A \textit{code} is a rule for converting information from one representation into another.
+	
+	\begin{itemize}
+		\item $A \rightarrow 0$
+		\item $B \rightarrow 1$
+		\item $ \vdots $
+		\item $Z \rightarrow 25$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Encoding}
+	\textit{Encoding} is the act of conversion, following the rules of the code.
+	
+	\begin{itemize}
+		\item HELLO $\rightarrow$ 8 5 12 12 15
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Errors}
+	\textit{Random errors} are a type of error that corrupts individual symbols during transmission.
+	\begin{itemize}
+		\item 8 5 1\textbf{2} 12 15 $\rightarrow$ 8 5 1\textbf{9} 12 15
+	\end{itemize}
+	
+	\textit{Burst errors} are errors that corrupt a large chunk of symbols.
+	\begin{itemize}
+		\item 8 5 \textbf{12 12 1}5 $\rightarrow$ 8 5 \textbf{19 24 }5
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Error Correction}
+	\textit{Error detecting codes} are a type of code that can detect when these errors occur.
+	
+	\textit{Error correcting codes} are a type of code that can correct these errors.
+\end{frame}
+
+\subsection{Cyclic Redundancy Check}
+
+\begin{frame}
+	\frametitle{Introduction to CRC}
+	\begin{itemize}
+		\item Used to detect accidental changes in data.
+		\item Appends a check value to the message prior to transmission.
+		\item After transmission the check value is recomputed and compared to the original value.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Application and Integrity}
+	\begin{itemize}
+		\item CRC is good at detecting random errors and burst errors.
+		\item It is not suitable for detecting intentional modifications to the data.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Example}
+	To compute a binary CRC with a 3-bit check value:
+	\begin{itemize}
+		\item Start with our message encoded in binary: 11010011101100
+		\item Find a irreducible polynomial of degree 3: $x^{3} + x + 1 \rightarrow$ 1011
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Coming soon:}
+	The remainder of the CRC example.
+\end{frame}
+
+%\subsection{Linear Codes}
+
+%\begin{frame}
+%	\frametitle{Linear Codes}
+%\end{frame}
+
+\section{Generalized Reed-Solomon Codes}
+
+\subsection{Reed-Solomon Codes}
+
+\begin{frame}
+	\frametitle{History}
+	\begin{itemize}
+		\item Introduced in 1960 by I.S. Reed and G. Solomon.
+		\item Useful in practical applications and mathematically interesting.
+		\item Used CD players and deep-space communications.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Code}
+	\begin{itemize}
+		\item Reed-Solomon (RS) codes are a liner, error correcting code.
+		\item A RS-code is capable of correcting $\frac{n - k}{2}$ symbol errors. Where $n$ is the total number of symbols, and $k$ is the number of data symbols.
+		\item Great at correcting burst errors.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Representation}
+	A message encoded using an RS-code is a polynomial with the message symbols embedded in the coefficients.
+	
+	For our example, the polynomial would be in in $\mathbb{F}_{64}[x]$ and is our codeword.
+	\begin{itemize}
+		\item $\text{H} + \text{E}x + \text{L}x^{2} + \text{L}x^{3} + \text{O}x^{4}$.
+	\end{itemize}	
+	
+
+\end{frame}
+
+\subsection{Generalized Reed-Solomon Codes}
+
+\begin{frame}
+	\frametitle{Generalized Reed-Solomon Codes}
+	\begin{itemize}
+		\item There is an alternate representation, known as Generalized Reed-Solomon (GRS) Codes.
+		\item In this representation the message polynomial is evaluated at $n$ distinct points and multiplied by a scalar. 
+		\item The result is a $n$-dimensional vector, which is used as the codeword.
+		\item This is the representation that will be used for the remainder of the presentation.
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Code}
+\end{frame}
+
+\subsection{Encoding GRS Codes}
+
+\begin{frame}
+	\frametitle{The Code}
+\end{frame}
+
+\subsection{Decoding GRS Codes}
+
+\begin{frame}
+	\frametitle{The Code}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+	\frametitle{Final Thoughts}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Questions}
+\end{frame}
+
+\end{document}
