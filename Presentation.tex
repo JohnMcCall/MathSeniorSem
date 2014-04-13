@@ -247,19 +247,73 @@
 
 \begin{frame}
 	\frametitle{The Code}
+	Let $F$ be a field. Choose nonzero elements $\hat{v} = v_{1}, v_{2}...,v_{n} \in F$ and distinct elements $\hat{\alpha} = \alpha_{1}, \alpha_{2}...,\alpha_{n} \in F$.\\~\\
+	
+	$C = $ GRS $_{n, k}(\hat{\alpha}, \hat{v}) = \{(v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}) | f(x) \in F[x]_{k}\}$
+	\begin{itemize}
+		\item $F = \mathbb{F}_{64}$.
+		\item $\hat{v} = (!, !, ..., !)$.
+		\item $\hat{\alpha} = (A, B, ..., W)$.
+		\item $f(x)$ is our \textit{message polynomial}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Message Polynomial}
+	\begin{itemize}
+		\item The message: "THIS IS MAJOR TOM".
+		\item $f(x) = \text{T} + \text{H}x + \text{I}x^{2} + \text{S}x^{3} + \text{ }x^{4} + \text{I}x^{5} + \text{S}x^{6} + \text{ }x^{7} + \text{M}x^{8} + \text{A}x^{9} + \text{J}x^{10} + \text{O}x^{11} + \text{R}x^{12} + \text{ }x^{13} + \text{T}x^{14} + \text{O}x^{15} + \text{M}x^{16}$
+		\item $\hat{c} = \hat{p} + \hat{e}$
+	\end{itemize}
 \end{frame}
 
 \subsection{Encoding GRS Codes}
 
 \begin{frame}
-	\frametitle{The Code}
+	\frametitle{The Codeword}
+	The codeword, $\hat{c} = (v_{1}f(\alpha_{1}),v_{2}f(\alpha_{2}),...,v_{n}f(\alpha_{n}))$
+	\begin{itemize}
+		\item $\hat{c} = (!f(\text{A}),!f(\text{B}),...,!f(\text{W}))$
+		\item $\hat{c} = \{\text{T}, \text{(}, \text{U}, \text{8}, \text{P}, \text{K}, \text{G}, \text{N}, \text{W}, \text{P}, \text{4}, \text{K}, \text{'}, \text{\_}, \text{N}, \text{(}, \text{M}, \text{H}, \text{K}, \text{1}, \text{"}, <, \text{K}\}$
+	\end{itemize}
+	
 \end{frame}
 
 \subsection{Decoding GRS Codes}
 
 \begin{frame}
-	\frametitle{The Code}
+	\frametitle{The Received Message}
+	\begin{itemize}
+		\item $\hat{c} = \{\text{T}, \text{(}, \text{U}, \text{8}, \text{P}, \text{K}, \textbf{G}, \text{N}, \text{W}, \text{P}, \textbf{4}, \text{K}, \text{'}, \text{\_}, \text{N}, \text{(}, \text{M}, \text{H}, \text{K}, \text{1}, \text{"}, <, \text{K}\}$
+		\item $\hat{p} = \{\text{T}, \text{(}, \text{U}, \text{8}, \text{P}, \text{K}, \textbf{P}, \text{N}, \text{W}, \text{P}, \textbf{\&}, \text{K}, \text{'}, \text{\_}, \text{N}, \text{(}, \text{M}, \text{H}, \text{K}, \text{1}, \text{"}, \textbf{R}, \text{K}\}$
+	\end{itemize}
 \end{frame}
+
+\begin{frame}
+	\frametitle{Finding the Dual Code}
+	\begin{itemize}
+		\item Want to find $\hat{u}$ such that $C^{\perp} = $ GRS $_{n,k}(\hat{\alpha}, \hat{u})$
+		\item $L(x) = (x - \alpha_{1})(x - \alpha_{2})...(x - \alpha_{n})$
+		\item $L_{i}(x) = \frac{L(x)}{(x - \alpha_{i})}$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Finding the Dual Code}
+	\begin{itemize}
+		\item $\hat{u} = (L_{1}(\alpha_{1}), L_{2}(\alpha_{2}), ... L_{n}(\alpha_{n}),) $
+		\item $\hat{u} = (L_{1}(A), L_{2}(B), ... L_{23}(W)) $
+		\item $\hat{u} = \{\text{2}, \text{D}, \text{V}, +, \text{9}, \text{O}, ], \text{G}, *, \wedge, \text{3}, \text{5}, \text{X}, \text{,}, \text{A}, \text{A}, >, <, \text{C}, \text{8}, \text{G}, \text{E}, \text{:}\} $
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Finding the Syndrome Polynomial}
+	\begin{itemize}
+	\item
+	\end{itemize}
+\end{frame}
+
 
 \section{Conclusion}
 

@@ -15,9 +15,8 @@ ca = CoefficientArithmetic.new
 vc = encoder.getValidCharacters
 replacements = ca.getReplacements
 
-#puts ca.findInverse('%')
-#puts ca.findInverse('@')
-#puts ca.findInverse('Z')
+puts MyPolynomial['?', ']', 'E'].substitute('3').to_s
+puts MyPolynomial['Z', ' ', 'C'].substitute('3').to_s
 
 def euclid(r0, r1)
     s = [MyPolynomial['!'], MyPolynomial[' ']]
@@ -49,7 +48,7 @@ def euclid(r0, r1)
 end
 
 
-sigma = MyPolynomial['!', 'G']
+sigma = MyPolynomial['!', 'Z', 'L', 'C']
 vc.each do |elt|
     if (sigma.substitute(elt) == ' ')
         puts elt
@@ -114,11 +113,10 @@ puts
 # c[10] was a "4" is now a "&"
 # c[21] was a "<" is now a "R"
 # we calculate the Syndrome Polynomial for the received message vector, p.
-p = ["T", "(", "U", "8", "P", "K", "Z", "N", "W", "P", "4", "K", "'", "_", "N", "(", "M", "H", "K", "1", "\"", "<", "K"]
+p = ["T", "(", "U", "8", "P", "K", "Z", "N", "W", "P", "&", "K", "'", "_", "N", "(", "M", "H", "K", "1", "\"", "R", "K"]
 puts "p = " + p.to_s
 puts
 
-=begin
 inverses = Hash.new()
 
 a.each do |elt|
@@ -143,8 +141,8 @@ sp = MyPolynomial[' ']
   product = inverses[a[i]] * products[i]
   sp = sp + product
 end
-=end
-sp = MyPolynomial['L', "[", '@', '5', '6', '\\']
+
+#sp = MyPolynomial['L', "[", '@', '5', '6', '\\']
 puts "Sp = " + sp.to_s
 puts
 
