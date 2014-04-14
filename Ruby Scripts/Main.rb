@@ -15,8 +15,11 @@ ca = CoefficientArithmetic.new
 vc = encoder.getValidCharacters
 replacements = ca.getReplacements
 
-puts MyPolynomial['?', ']', 'E'].substitute('3').to_s
-puts MyPolynomial['Z', ' ', 'C'].substitute('3').to_s
+puts ca.findInverse('G')
+w =  MyPolynomial['?', ']', 'E'].substitute('3').to_s
+o =  MyPolynomial['Z', ' ', 'C'].substitute('3').to_s
+
+puts ca.multiply(['G', w, ca.findInverse(ca.multiply([']', '-']))])
 
 def euclid(r0, r1)
     s = [MyPolynomial['!'], MyPolynomial[' ']]
@@ -116,7 +119,7 @@ puts
 p = ["T", "(", "U", "8", "P", "K", "Z", "N", "W", "P", "&", "K", "'", "_", "N", "(", "M", "H", "K", "1", "\"", "R", "K"]
 puts "p = " + p.to_s
 puts
-
+=begin
 inverses = Hash.new()
 
 a.each do |elt|
@@ -141,8 +144,8 @@ sp = MyPolynomial[' ']
   product = inverses[a[i]] * products[i]
   sp = sp + product
 end
-
-#sp = MyPolynomial['L', "[", '@', '5', '6', '\\']
+=end
+sp = MyPolynomial['?', "V", '9', '+', '^', '1']
 puts "Sp = " + sp.to_s
 puts
 
