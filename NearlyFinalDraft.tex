@@ -261,13 +261,13 @@ $\hat{c} = (\f{T}, \f{(}, \f{U}, \f{8}, \f{P}, \f{K}, \f{G}, \f{N}, \f{W}, \f{P}
 
 
 \subsection{Decoding GRS Codes}
-Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses the dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission.
+Having an encoded message is useless without someway to decode it. Reed-Solomon codes take advantage of a technique called \textit{syndrome decoding}. Syndrome decoding uses a dual code and check matrices to decode and to detect and correct errors that may have occurred in transmission.
 
 The code $\text{GRS}_{n,k}(\hat{\alpha}, \hat{v})$ over $F$ is equal to the set of all vectors $\textbf{c} = (c_{1},c_{2},...,c_{n}) \in F^{n}$ such that:
 \begin{center}
 $\sum\limits_{i = 1}^{n} \dfrac{c_{i}u_{i}}{1 - \alpha_{i}z} = 0$ (mod $z^{r}$),
 \end{center}
-where $r = n - k \text{ and } u_{i}^{-1} = v_{i}\prod\limits_{j \neq i} (\alpha_{i} - \alpha_{j})$. The $u_{i}$ listed here are the same $u_{i}$ defined above.  This is known as the \textit{Goppa formulation for GRS codes}. The Goppa formulation is simply another way of writing our code, but there are benefits to using this formulation as we will see below.
+where $r = n - k \text{ and } u_{i}^{-1} = v_{i}\prod\limits_{j \neq i} (\alpha_{i} - \alpha_{j})$. The $u_{i}$ listed here are the same $u_{i}$ defined above. The $z$ in this equation is just a variable. We use $z$ instead of $x$ here so that this polynomial is not confused with our polynomials in $\mathbb{F}_{64}[x]$.  This is known as the \textit{Goppa formulation for GRS codes}. The Goppa formulation is simply another way of writing our code~\cite{Hall:2012}, but there are benefits to using this formulation as we will see below.
 
 If $\textbf{c} = (c_{1},c_{2},...,c_{n})$, a GRS code in the Goppa formulation, is transmitted, and $\textbf{p} = (p_{1},p_{2},...,p_{n})$ is received, then there is some vector $\textbf{e} = (e_{1},e_{2},...e_{n})$ such that $\textbf{p} = \textbf{c} + \textbf{e}$. This vector is called the error vector. We can then calculate the \textit{syndrome polynomial} of \textbf{p}:
 \begin{center}
